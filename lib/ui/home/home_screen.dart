@@ -4,6 +4,7 @@ import '../profile/profile_screen.dart';
 // import '../profile/user_profile_card.dart';
 import '../favorites/favorites_screen.dart';
 import '../../models/homestay.dart';
+import '../bookings/booking_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -65,11 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
           onFavoriteToggle: _onFavoriteToggle,
         );
       case 2:
-        return const Center(
-            child: Text(
-          "Trang Đặt Phòng",
-          style: TextStyle(fontSize: 20),
-        ));
+        return const BookingScreen();
       case 3:
         return const ProfileScreen();
       default:
