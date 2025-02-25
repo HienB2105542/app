@@ -13,7 +13,9 @@ class HomeCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => DetailScreen(homestay: homestay,),
+            builder: (context) => DetailScreen(
+              homestay: homestay,
+            ),
           ),
         );
       },

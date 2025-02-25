@@ -7,7 +7,9 @@ class BookingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("My Bookings")),
+      appBar: AppBar(
+        title: Text("My Bookings"),
+      ),
       body: ListView(
         children: [
           BookingItemCard(),

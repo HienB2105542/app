@@ -11,7 +11,6 @@ class HomeScreen extends StatefulWidget {
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
-  
 }
 
 class _HomeScreenState extends State<HomeScreen> {
@@ -22,7 +21,8 @@ class _HomeScreenState extends State<HomeScreen> {
       _selectedIndex = index;
     });
   }
-  void _onFavoriteToggle(Homestay homestay) {
+
+  void _onFavoriteToggle(Homestay homestay, bool isFavorite) {
     setState(() {
       if (favoriteHomestays.contains(homestay)) {
         favoriteHomestays.remove(homestay);
@@ -31,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     });
   }
+
   static List<Homestay> favoriteHomestays = []; // Danh sách homestay yêu thích
   @override
   Widget build(BuildContext context) {
@@ -63,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
       case 1:
         return FavoritesScreen(
           favoriteHomestays: favoriteHomestays,
-          onFavoriteToggle: _onFavoriteToggle,
+          onFavoriteToggle: (homestay, isFavorite) => _onFavoriteToggle(homestay, isFavorite),
         );
       case 2:
         return const BookingScreen();

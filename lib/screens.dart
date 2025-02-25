@@ -21,8 +21,8 @@ class AppScreens {
 
   static List<Homestay> favoriteHomestays = []; // Danh sách homestay yêu thích
 
-  static void onFavoriteToggle(Homestay homestay) {
-    if (favoriteHomestays.contains(homestay)) {
+  static void onFavoriteToggle(Homestay homestay, bool isFavorite) {
+    if (isFavorite) {
       favoriteHomestays.remove(homestay);
     } else {
       favoriteHomestays.add(homestay);
