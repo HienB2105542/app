@@ -31,7 +31,7 @@ class FavoritesScreen extends StatelessWidget {
                 final homestay = favoriteHomestays[index];
                 return ListTile(
                   leading: Image.asset(
-                    homestay.imageUrl ?? '',
+                    homestay.imageUrl,
                     width: 50,
                     height: 50,
                     fit: BoxFit.cover,

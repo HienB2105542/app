@@ -67,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         },
         backgroundColor: Colors.redAccent,
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.add, color: Colors.white,),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
