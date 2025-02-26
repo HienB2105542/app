@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 // import 'booking_screen.dart';
+import '../../models/homestay.dart';
 
 class DetailScreen extends StatelessWidget {
-  final Map<String, String> homestay;
+  final Homestay homestay;
 
   const DetailScreen({super.key, required this.homestay});
 
@@ -10,7 +11,7 @@ class DetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(homestay["name"]!),
+        title: Text(homestay.name),
         backgroundColor: Colors.redAccent,
         centerTitle: true,
       ),
@@ -22,7 +23,7 @@ class DetailScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Image.asset(
-                    homestay["image"]!,
+                    homestay.imageUrl,
                     width: double.infinity,
                     height: 250,
                     fit: BoxFit.cover,
@@ -33,7 +34,7 @@ class DetailScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          homestay["name"]!,
+                          homestay.name,
                           style: const TextStyle(
                               fontSize: 22, fontWeight: FontWeight.bold),
                         ),
@@ -43,7 +44,7 @@ class DetailScreen extends StatelessWidget {
                             const Icon(Icons.location_on,
                                 color: Colors.redAccent),
                             const SizedBox(width: 5),
-                            Text(homestay["location"]!,
+                            Text(homestay.location,
                                 style: const TextStyle(fontSize: 16)),
                           ],
                         ),
@@ -52,13 +53,13 @@ class DetailScreen extends StatelessWidget {
                           children: [
                             const Icon(Icons.group, color: Colors.redAccent),
                             const SizedBox(width: 5),
-                            Text(homestay["guests"]!,
+                            Text(homestay.guests,
                                 style: const TextStyle(fontSize: 16)),
                           ],
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          "Giá: ${homestay["price"]!}",
+                          "Giá: ${homestay.price}",
                           style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,

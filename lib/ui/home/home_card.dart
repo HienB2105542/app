@@ -1,10 +1,42 @@
 import 'package:flutter/material.dart';
 import '../homestays/detail_screen.dart';
+import '../../models/homestay.dart';
 
-class HomeCard extends StatelessWidget {
-  final Map<String, String> homestay;
+class HomeCard extends StatefulWidget {
+  final Homestay homestay;
+  final Function(Homestay, bool) onFavoriteToggle;
+  final List<Homestay> favoriteHomestays;
 
-  const HomeCard({super.key, required this.homestay});
+  const HomeCard({
+    super.key,
+    required this.homestay,
+    required this.onFavoriteToggle,
+    required this.favoriteHomestays,
+  });
+
+  @override
+  State<HomeCard> createState() => _HomeCardState();
+}
+
+class _HomeCardState extends State<HomeCard> {
+  bool isFavorite = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkIfFavorite();
+  }
+
+  void _checkIfFavorite() {
+    for (var favorite in widget.favoriteHomestays) {
+      if (favorite.name == widget.homestay.name) {
+        setState(() {
+          isFavorite = true;
+        });
+        break;
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +46,7 @@ class HomeCard extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => DetailScreen(
-              homestay: homestay,
+              homestay: widget.homestay,
             ),
           ),
         );
@@ -32,7 +64,7 @@ class HomeCard extends StatelessWidget {
                     borderRadius:
                         const BorderRadius.vertical(top: Radius.circular(10)),
                     child: Image.asset(
-                      homestay["image"]!,
+                      widget.homestay.imageUrl,
                       width: double.infinity,
                       fit: BoxFit.cover,
                     ),
@@ -41,10 +73,15 @@ class HomeCard extends StatelessWidget {
                     top: 10,
                     right: 10,
                     child: IconButton(
-                      icon: const Icon(Icons.favorite_border,
-                          color: Colors.white),
+                      icon: Icon(
+                        isFavorite ? Icons.favorite : Icons.favorite_border,
+                        color: isFavorite ? Colors.red : Colors.white,
+                      ),
                       onPressed: () {
-                        // Xử lý khi nhấn nút yêu thích
+                        setState(() {
+                          isFavorite = !isFavorite;
+                        });
+                        widget.onFavoriteToggle(widget.homestay, isFavorite);
                       },
                     ),
                   ),
@@ -57,19 +94,19 @@ class HomeCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    homestay["name"]!,
+                    widget.homestay.name,
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 5),
-                  Text(homestay["location"]!,
+                  Text(widget.homestay.location,
                       style: TextStyle(color: Colors.grey[600])),
                   const SizedBox(height: 5),
-                  Text(homestay["guests"]!,
+                  Text(widget.homestay.guests,
                       style: TextStyle(color: Colors.grey[600])),
                   const SizedBox(height: 5),
                   Text(
-                    homestay["price"]!,
+                    widget.homestay.price.toString(),
                     style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,

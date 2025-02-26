@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:homestay/ui/homestays/homestay_list.dart';
 import 'screens.dart';
 import 'ui/home/home_screen.dart';
 import 'ui/bookings/booking_screen.dart';
@@ -29,7 +28,6 @@ class MyApp extends StatelessWidget {
         AppScreens.login: (ctx) => LoginScreen(),
         AppScreens.bookings: (ctx) => BookingScreen(),
         AppScreens.profile: (ctx) => ProfileScreen(),
-        AppScreens.homestaylist: (ctx) => HomestayListScreen(),
       },
     );
   }

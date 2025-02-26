@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'home_manager.dart';
 import 'home_card.dart';
+import '../../models/homestay.dart';
 
 class Home extends StatelessWidget {
-  const Home({super.key});
+  final List<Homestay> favoriteHomestays;
+  final Function(Homestay, bool) onFavoriteToggle;
+
+  const Home({
+    required this.favoriteHomestays,
+    required this.onFavoriteToggle,
+    Key? key
+  }):super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +103,11 @@ class Home extends StatelessWidget {
           ),
           itemCount: HomeManager.homestays.length,
           itemBuilder: (context, index) {
-            return HomeCard(homestay: HomeManager.homestays[index]);
+            return HomeCard(
+              homestay: HomeManager.homestays[index],
+              favoriteHomestays: favoriteHomestays,
+              onFavoriteToggle: onFavoriteToggle,
+            );
           },
         ),
       ],

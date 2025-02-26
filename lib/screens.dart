@@ -4,7 +4,6 @@ import 'ui/home/home_screen.dart';
 import 'ui/bookings/booking_screen.dart';
 import 'ui/auth/login_screen.dart';
 import 'ui/profile/profile_screen.dart';
-import 'ui/homestays/homestay_list.dart';
 import 'ui/favorites/favorites_screen.dart';
 import '../models/homestay.dart';
 import 'ui/home/intro.dart';
@@ -36,7 +35,6 @@ class AppScreens {
     bookings: (context) => BookingScreen(),
     profile: (context) => ProfileScreen(),
     detail: (context) => ProfileScreen(),
-    homestaylist: (context) => HomestayListScreen(),
     favorites: (context) => FavoritesScreen(
           favoriteHomestays: favoriteHomestays,
           onFavoriteToggle: onFavoriteToggle,
