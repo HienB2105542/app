@@ -1,25 +1,52 @@
+// models/booking.dart
 class Booking {
   final String id;
-  final String userName;
   final String homestayName;
-  final String email;
-  final String phone;
-  final int guests;
-  final DateTime checkIn;
-  final DateTime checkOut;
+  final String location;
+  final String imageUrl;
+  final DateTime checkInDate;
+  final DateTime checkOutDate;
+  final String status;
+  final double rating;
+  final int nights;
+  final double totalPrice;
 
   Booking({
     required this.id,
-    required this.userName,
     required this.homestayName,
-    required this.email,
-    required this.phone,
-    required this.guests,
-    required this.checkIn,
-    required this.checkOut,
-    required String name,
-    required double totalPrice,
+    required this.location,
+    required this.imageUrl,
+    required this.checkInDate,
+    required this.checkOutDate,
+    required this.status,
+    this.rating = 0.0,
+    required this.nights,
+    required this.totalPrice,
   });
 
-  get totalPrice => null;
+  Booking copyWith({
+    String? id,
+    String? homestayName,
+    String? location,
+    String? imageUrl,
+    DateTime? checkInDate,
+    DateTime? checkOutDate,
+    String? status,
+    double? rating,
+    int? nights,
+    double? totalPrice,
+  }) {
+    return Booking(
+      id: id ?? this.id,
+      homestayName: homestayName ?? this.homestayName,
+      location: location ?? this.location,
+      imageUrl: imageUrl ?? this.imageUrl,
+      checkInDate: checkInDate ?? this.checkInDate,
+      checkOutDate: checkOutDate ?? this.checkOutDate,
+      status: status ?? this.status,
+      rating: rating ?? this.rating,
+      nights: nights ?? this.nights,
+      totalPrice: totalPrice ?? this.totalPrice,
+    );
+  }
 }

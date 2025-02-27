@@ -15,7 +15,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
-  List<Homestay> favoriteHomestays = []; // Changed to List<Homestay>
+  List<Homestay> favoriteHomestays = [];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -24,14 +24,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _onFavoriteToggle(Homestay homestay, bool isFavorite) {
-    // Changed parameter type to Homestay
     setState(() {
       if (isFavorite) {
-        // Check if not already in favorites
         bool alreadyExists = false;
         for (var favorite in favoriteHomestays) {
           if (favorite.name == homestay.name) {
-            // Changed to use object property
             alreadyExists = true;
             break;
           }
@@ -40,8 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
           favoriteHomestays.add(homestay);
         }
       } else {
-        favoriteHomestays.removeWhere((item) =>
-            item.name == homestay.name); // Changed to use object property
+        favoriteHomestays.removeWhere((item) => item.name == homestay.name);
       }
     });
   }
@@ -49,38 +45,101 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        title: const Text("Homestay Hinn"),
+        elevation: 0,
+        title: const Text(
+          "Homestay Hinn",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 22,
+          ),
+        ),
         backgroundColor: Colors.redAccent,
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.notifications_outlined),
+            onPressed: () {
+              // Notification action
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {
+              // Search action
+            },
+          ),
+        ],
       ),
       body: _buildBody(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => CreatePostScreen()),
-          ).then((_) {
-            // Refresh the screen when returning from create post
-            setState(() {});
-          });
-        },
-        backgroundColor: Colors.redAccent,
-        child: const Icon(Icons.add, color: Colors.white,),
+      floatingActionButton: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        child: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CreatePostScreen()),
+            ).then((_) {
+              setState(() {});
+            });
+          },
+          elevation: 5,
+          backgroundColor: Colors.redAccent,
+          child: const Icon(Icons.add, color: Colors.white, size: 28),
+        ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        selectedItemColor: const Color.fromARGB(255, 248, 41, 26),
-        unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Trang chủ"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.favorite), label: "Yêu thích"),
-          BottomNavigationBarItem(icon: Icon(Icons.event), label: "Đặt phòng"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Tài khoản"),
-        ],
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(15),
+            topRight: Radius.circular(15),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 10,
+              offset: const Offset(0, -3),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(15),
+            topRight: Radius.circular(15),
+          ),
+          child: BottomNavigationBar(
+            currentIndex: _selectedIndex,
+            onTap: _onItemTapped,
+            selectedItemColor: Colors.redAccent,
+            unselectedItemColor: Colors.grey[600],
+            showUnselectedLabels: true,
+            type: BottomNavigationBarType.fixed,
+            elevation: 20,
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home_outlined),
+                activeIcon: Icon(Icons.home),
+                label: "Trang chủ",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.favorite_outline),
+                activeIcon: Icon(Icons.favorite),
+                label: "Yêu thích",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.event_outlined),
+                activeIcon: Icon(Icons.event),
+                label: "Đặt phòng",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person_outline),
+                activeIcon: Icon(Icons.person),
+                label: "Tài khoản",
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
