@@ -18,18 +18,38 @@ class _LoginScreenState extends State<LoginScreen> {
     String email = _emailController.text;
     String password = _passwordController.text;
 
+    // Kiểm tra xem đã nhập dữ liệu chưa
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Vui lòng nhập email và mật khẩu")),
+      );
+      return;
+    }
+
     bool success = await _authService.loginUser(email, password);
     if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Đăng nhập thành công!")),
       );
-      // Chuyển sang màn hình chính (nếu có)
+      // Chuyển sang màn hình chính
+      Navigator.pushReplacementNamed(context, '/');
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Đăng nhập thất bại!")),
+        SnackBar(
+            content:
+                Text("Đăng nhập thất bại! Kiểm tra lại email và mật khẩu.")),
       );
     }
   }
+
+  @override
+  void dispose() {
+    // Giải phóng controller khi widget bị hủy
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,6 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     const SizedBox(height: 20),
                     TextField(
+                      controller: _emailController, // Kết nối controller email
                       decoration: InputDecoration(
                         labelText: 'Email',
                         prefixIcon: const Icon(Icons.email),
@@ -94,6 +115,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     const SizedBox(height: 15),
                     TextField(
+                      controller:
+                          _passwordController, // Kết nối controller mật khẩu
                       decoration: InputDecoration(
                         labelText: 'Mật Khẩu',
                         prefixIcon: const Icon(Icons.lock),

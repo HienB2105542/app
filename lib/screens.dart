@@ -6,7 +6,6 @@ import 'ui/auth/login_screen.dart';
 import 'ui/profile/profile_screen.dart';
 import 'ui/favorites/favorites_screen.dart';
 import '../models/homestay.dart';
-import 'ui/home/intro.dart';
 
 class AppScreens {
   static const String home = '/';
@@ -29,7 +28,6 @@ class AppScreens {
   }
 
   static Map<String, WidgetBuilder> routes = {
-    intro: (context) => WelcomeScreen(),
     home: (context) => HomeScreen(),
     login: (context) => LoginScreen(),
     bookings: (context) => BookingScreen(),

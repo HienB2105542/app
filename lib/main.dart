@@ -4,7 +4,7 @@ import 'ui/home/home_screen.dart';
 import 'ui/bookings/booking_screen.dart';
 import 'ui/auth/login_screen.dart';
 import 'ui/profile/profile_screen.dart';
-import 'ui/home/intro.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -21,9 +21,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: AppScreens.home,
+      initialRoute: AppScreens.login,
       routes: {
-        AppScreens.intro: (ctx) => WelcomeScreen(),
         AppScreens.home: (ctx) => HomeScreen(),
         AppScreens.login: (ctx) => LoginScreen(),
         AppScreens.bookings: (ctx) => BookingScreen(),
