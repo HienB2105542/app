@@ -5,6 +5,8 @@ import '../favorites/favorites_screen.dart';
 import '../bookings/booking_screen.dart';
 import '../posts/create_post_create.dart';
 import '../../models/homestay.dart';
+import '../../services/auth_service.dart';
+import '../auth/login_screen.dart'; // Import màn hình đăng nhập
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,6 +18,24 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   List<Homestay> favoriteHomestays = [];
+  final AuthService _authService = AuthService();
+
+  @override
+  void initState() {
+    super.initState();
+    _checkLoginStatus();
+  }
+
+  Future<void> _checkLoginStatus() async {
+    bool isLoggedIn = await _authService.isLoggedIn();
+    if (!isLoggedIn && mounted) {
+      // Nếu chưa đăng nhập, điều hướng đến màn hình đăng nhập
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+      );
+    }
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -26,13 +46,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void _onFavoriteToggle(Homestay homestay, bool isFavorite) {
     setState(() {
       if (isFavorite) {
-        bool alreadyExists = false;
-        for (var favorite in favoriteHomestays) {
-          if (favorite.name == homestay.name) {
-            alreadyExists = true;
-            break;
-          }
-        }
+        bool alreadyExists =
+            favoriteHomestays.any((item) => item.name == homestay.name);
         if (!alreadyExists) {
           favoriteHomestays.add(homestay);
         }
@@ -73,73 +88,49 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: _buildBody(),
-      floatingActionButton: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        child: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => CreatePostScreen()),
-            ).then((_) {
-              setState(() {});
-            });
-          },
-          elevation: 5,
-          backgroundColor: Colors.redAccent,
-          child: const Icon(Icons.add, color: Colors.white, size: 28),
-        ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => CreatePostScreen()),
+          ).then((_) {
+            setState(() {});
+          });
+        },
+        elevation: 5,
+        backgroundColor: Colors.redAccent,
+        child: const Icon(Icons.add, color: Colors.white, size: 28),
       ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(15),
-            topRight: Radius.circular(15),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        selectedItemColor: Colors.redAccent,
+        unselectedItemColor: Colors.grey[600],
+        showUnselectedLabels: true,
+        type: BottomNavigationBarType.fixed,
+        elevation: 20,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_outlined),
+            activeIcon: Icon(Icons.home),
+            label: "Trang chủ",
           ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 10,
-              offset: const Offset(0, -3),
-            ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(15),
-            topRight: Radius.circular(15),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite_outline),
+            activeIcon: Icon(Icons.favorite),
+            label: "Yêu thích",
           ),
-          child: BottomNavigationBar(
-            currentIndex: _selectedIndex,
-            onTap: _onItemTapped,
-            selectedItemColor: Colors.redAccent,
-            unselectedItemColor: Colors.grey[600],
-            showUnselectedLabels: true,
-            type: BottomNavigationBarType.fixed,
-            elevation: 20,
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home_outlined),
-                activeIcon: Icon(Icons.home),
-                label: "Trang chủ",
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.favorite_outline),
-                activeIcon: Icon(Icons.favorite),
-                label: "Yêu thích",
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.event_outlined),
-                activeIcon: Icon(Icons.event),
-                label: "Đặt phòng",
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person_outline),
-                activeIcon: Icon(Icons.person),
-                label: "Tài khoản",
-              ),
-            ],
+          BottomNavigationBarItem(
+            icon: Icon(Icons.event_outlined),
+            activeIcon: Icon(Icons.event),
+            label: "Đặt phòng",
           ),
-        ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline),
+            activeIcon: Icon(Icons.person),
+            label: "Tài khoản",
+          ),
+        ],
       ),
     );
   }
@@ -149,8 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
       case 1:
         return FavoritesScreen(
           favoriteHomestays: favoriteHomestays,
-          onFavoriteToggle: (homestay, isFavorite) =>
-              _onFavoriteToggle(homestay, isFavorite),
+          onFavoriteToggle: _onFavoriteToggle,
         );
       case 2:
         return const BookingScreen();

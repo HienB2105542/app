@@ -18,7 +18,6 @@ class _LoginScreenState extends State<LoginScreen> {
     String email = _emailController.text;
     String password = _passwordController.text;
 
-    // Kiểm tra xem đã nhập dữ liệu chưa
     if (email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Vui lòng nhập email và mật khẩu")),
@@ -31,7 +30,8 @@ class _LoginScreenState extends State<LoginScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Đăng nhập thành công!")),
       );
-      // Chuyển sang màn hình chính
+
+      // Chuyển trang sau khi đăng nhập
       Navigator.pushReplacementNamed(context, '/');
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -41,6 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
       );
     }
   }
+
 
   @override
   void dispose() {
