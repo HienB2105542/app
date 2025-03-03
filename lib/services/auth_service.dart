@@ -1,69 +1,82 @@
-import 'package:pocketbase/pocketbase.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
-  final PocketBase pb = PocketBase('http://10.0.0.2:8090');
+  final String pocketBaseUrl =
+      'http://127.0.0.1:8090/api/collections/users/auth-with-password';
 
-  // Đăng ký + tự động đăng nhập sau khi đăng ký
-  Future<bool> registerUser(String email, String password, String name) async {
+  // Đăng nhập
+  Future<bool> login(String email, String password) async {
     try {
-      await pb.collection('users').create(body: {
-        "email": email,
-        "password": password,
-        "passwordConfirm": password,
-        "name": name,
-      });
+      final response = await http.post(
+        Uri.parse(pocketBaseUrl),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'identity': email, 'password': password}),
+      );
 
-      // Sau khi đăng ký, tự động đăng nhập
-      return await loginUser(email, password);
-    } catch (e) {
-      print("Lỗi đăng ký: $e");
-      return false;
-    }
-  }
-
-// Đăng nhập + Lưu token
-  Future<bool> loginUser(String email, String password) async {
-    try {
-      final authData =
-          await pb.collection('users').authWithPassword(email, password);
-
-      if (authData.record != null) {
-        // Lưu token vào local storage để giữ trạng thái đăng nhập
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('authToken', authData.token);
-        await prefs.setString('userId',
-            authData.record!.id); // Sử dụng dấu '!' sau khi kiểm tra null
-
-        print("Đăng nhập thành công! Token: ${authData.token}");
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        await saveUserData(data);
         return true;
       } else {
-        print("Lỗi: Không thể lấy thông tin người dùng sau khi đăng nhập.");
+        print('Lỗi đăng nhập: ${response.body}');
         return false;
       }
     } catch (e) {
-      print("Lỗi đăng nhập: $e");
+      print('Lỗi kết nối đăng nhập: $e');
       return false;
     }
   }
 
-  // Kiểm tra xem user có đăng nhập hay không
-  Future<bool> isLoggedIn() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('authToken');
+  // Đăng ký
+  Future<bool> register(String email, String password, String name) async {
+    try {
+      final response = await http.post(
+        Uri.parse('http://127.0.0.1:8090/api/collections/users/records'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': email, 'password': password, 'name': name}),
+      );
 
-    if (token != null && token.isNotEmpty) {
-      pb.authStore.save(token, null);
-      return true;
+      return response.statusCode == 201;
+    } catch (e) {
+      print('Lỗi đăng ký: $e');
+      return false;
     }
-    return false;
+  }
+
+  // Lưu thông tin đăng nhập
+  Future<void> saveUserData(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    if (data.containsKey('record')) {
+      await prefs.setString('user', jsonEncode(data['record']));
+      await prefs.setString('token', data['token']);
+      print("Lưu thành công: ${jsonEncode(data['record'])}");
+    } else {
+      print("Lưu thất bại: Dữ liệu không đúng");
+    }
+  }
+
+  // Lấy thông tin người dùng hiện tại
+  Future<Map<String, dynamic>?> getCurrentUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userData = prefs.getString('user');
+    print("Stored user data: $userData"); // Debug xem có dữ liệu không
+    if (userData != null) {
+      return jsonDecode(userData);
+    }
+    return null;
   }
 
   // Đăng xuất
   Future<void> logout() async {
-    pb.authStore.clear();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('authToken');
-    await prefs.remove('userId');
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+  }
+
+  // Kiểm tra đăng nhập
+  Future<bool> isLoggedIn() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.containsKey('token');
   }
 }

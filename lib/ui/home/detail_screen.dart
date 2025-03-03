@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// import 'booking_screen.dart';
 import '../../models/homestay.dart';
 
 class DetailScreen extends StatelessWidget {
@@ -53,7 +52,7 @@ class DetailScreen extends StatelessWidget {
                           children: [
                             const Icon(Icons.group, color: Colors.redAccent),
                             const SizedBox(width: 5),
-                            Text(homestay.guests,
+                            Text(homestay.guests.toString(),
                                 style: const TextStyle(fontSize: 16)),
                           ],
                         ),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'screens.dart';
+import 'ui/screens.dart';
 import 'ui/home/home_screen.dart';
 import 'ui/bookings/booking_screen.dart';
 import 'ui/auth/login_screen.dart';
-import 'ui/profile/profile_screen.dart';
+import 'ui/home/profile_screen.dart';
 
 void main() {
   runApp(MyApp());

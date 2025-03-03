@@ -14,8 +14,8 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: ListView(
+    return Scaffold(
+      body: ListView(
         physics: const BouncingScrollPhysics(),
         children: [
           _buildHeroSection(context),
@@ -38,7 +38,8 @@ class Home extends StatelessWidget {
       ),
     );
   }
-Widget _buildHeroSection(BuildContext context) {
+
+  Widget _buildHeroSection(BuildContext context) {
     return Container(
       height: 220, // Tăng chiều cao để tránh tràn nội dung
       width: double.infinity,
@@ -287,10 +288,10 @@ Widget _buildHeroSection(BuildContext context) {
             mainAxisSpacing: 15,
             childAspectRatio: 0.65,
           ),
-          itemCount: HomeManager.homestays.length,
+          itemCount: HomeManager().homestays.length,
           itemBuilder: (context, index) {
             return HomeCard(
-              homestay: HomeManager.homestays[index],
+              homestay: HomeManager().homestays[index],
               favoriteHomestays: favoriteHomestays,
               onFavoriteToggle: onFavoriteToggle,
             );

@@ -1,4 +1,3 @@
-// models/booking.dart
 class Booking {
   final String id;
   final String homestayName;
@@ -6,10 +5,10 @@ class Booking {
   final String imageUrl;
   final DateTime checkInDate;
   final DateTime checkOutDate;
-  final String status;
-  final double rating;
-  final int nights;
-  final double totalPrice;
+  final String status; //Trạng thái
+  final double rating; //đánh giá
+  final int nights; //khách ở bao nhiêu đem
+  final double totalPrice; //Tổng số tiền khách phải trả 
 
   Booking({
     required this.id,
@@ -47,6 +46,40 @@ class Booking {
       rating: rating ?? this.rating,
       nights: nights ?? this.nights,
       totalPrice: totalPrice ?? this.totalPrice,
+    );
+  }
+
+  // Chuyển đổi từ Booking sang JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'homestayName': homestayName,
+      'location': location,
+      'imageUrl': imageUrl,
+      'checkInDate':
+          checkInDate.toIso8601String(), 
+      'checkOutDate': checkOutDate.toIso8601String(),
+      'status': status,
+      'rating': rating,
+      'nights': nights,
+      'totalPrice': totalPrice,
+    };
+  }
+
+  // Chuyển đổi từ JSON sang Booking
+  factory Booking.fromJson(Map<String, dynamic> json) {
+    return Booking(
+      id: json['id'],
+      homestayName: json['homestayName'],
+      location: json['location'],
+      imageUrl: json['imageUrl'],
+      checkInDate: DateTime.parse(
+          json['checkInDate']), 
+      checkOutDate: DateTime.parse(json['checkOutDate']),
+      status: json['status'],
+      rating: (json['rating'] as num).toDouble(), 
+      nights: json['nights'],
+      totalPrice: (json['totalPrice'] as num).toDouble(),
     );
   }
 }

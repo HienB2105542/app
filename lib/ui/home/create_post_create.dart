@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:homestay/models/homestay.dart';
-import '../../ui/home/home_manager.dart';
+import 'home_manager.dart';
 
 class CreatePostScreen extends StatefulWidget {
   const CreatePostScreen({super.key});
@@ -171,7 +171,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         name: _nameController.text,
         description: "Mô tả homestay", 
         location: _locationController.text,
-        guests: _guestsController.text,
+        guests: int.tryParse(_guestsController.text) ?? 0,
         imageUrl: _selectedImage,
         price: double.tryParse(
                 _priceController.text.replaceAll(RegExp(r'[^0-9]'), '')) ??
@@ -180,7 +180,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       );
 
       // Thêm vào danh sách homestays
-      HomeManager.homestays.add(newHomestay);
+      HomeManager().homestays.add(newHomestay);
 
       // Hiển thị thông báo
       ScaffoldMessenger.of(context).showSnackBar(

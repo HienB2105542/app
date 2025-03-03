@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'home.dart';
-import '../profile/profile_screen.dart';
+import 'profile_screen.dart';
 import '../favorites/favorites_screen.dart';
 import '../bookings/booking_screen.dart';
-import '../posts/create_post_create.dart';
+import 'create_post_create.dart';
 import '../../models/homestay.dart';
-import '../../services/auth_service.dart';
-import '../auth/login_screen.dart'; // Import màn hình đăng nhập
+import '../auth/login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,24 +17,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   List<Homestay> favoriteHomestays = [];
-  final AuthService _authService = AuthService();
-
-  @override
-  void initState() {
-    super.initState();
-    _checkLoginStatus();
-  }
-
-  Future<void> _checkLoginStatus() async {
-    bool isLoggedIn = await _authService.isLoggedIn();
-    if (!isLoggedIn && mounted) {
-      // Nếu chưa đăng nhập, điều hướng đến màn hình đăng nhập
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
-      );
-    }
-  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -46,9 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void _onFavoriteToggle(Homestay homestay, bool isFavorite) {
     setState(() {
       if (isFavorite) {
-        bool alreadyExists =
-            favoriteHomestays.any((item) => item.name == homestay.name);
-        if (!alreadyExists) {
+        if (!favoriteHomestays.any((item) => item.name == homestay.name)) {
           favoriteHomestays.add(homestay);
         }
       } else {
@@ -75,14 +54,19 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications_outlined),
-            onPressed: () {
-              // Notification action
-            },
+            onPressed: () {},
           ),
           IconButton(
             icon: const Icon(Icons.search),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: const Icon(Icons.logout),
             onPressed: () {
-              // Search action
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
+              );
             },
           ),
         ],
@@ -93,9 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => CreatePostScreen()),
-          ).then((_) {
-            setState(() {});
-          });
+          ).then((_) => setState(() {}));
         },
         elevation: 5,
         backgroundColor: Colors.redAccent,

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'ui/home/home_screen.dart';
-import 'ui/bookings/booking_screen.dart';
-import 'ui/auth/login_screen.dart';
-import 'ui/profile/profile_screen.dart';
-import 'ui/favorites/favorites_screen.dart';
-import '../models/homestay.dart';
+import 'home/home_screen.dart';
+import 'bookings/booking_screen.dart';
+import 'auth/login_screen.dart';
+import 'home/profile_screen.dart';
+import 'favorites/favorites_screen.dart';
+import '../../models/homestay.dart';
 
 class AppScreens {
   static const String home = '/';

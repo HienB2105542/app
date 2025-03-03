@@ -1,7 +1,9 @@
 import 'package:pocketbase/pocketbase.dart';
+
 import '../models/homestay.dart';
 
-class PocketBaseService {
+
+class HomeService {
   final PocketBase pb = PocketBase('http://10.0.0.2:8090');
 
   Future<List<Homestay>> getHomestays() async {

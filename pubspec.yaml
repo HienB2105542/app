@@ -15,6 +15,7 @@ dependencies:
   pocketbase: ^0.18.1
   intl: ^0.18.1
   shared_preferences: ^2.2.2
+  email_validator: ^2.1.17
 
 dev_dependencies:
   flutter_test:

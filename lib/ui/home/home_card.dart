@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../homestays/detail_screen.dart';
+import '../home/detail_screen.dart';
 import '../../models/homestay.dart';
 
 class HomeCard extends StatefulWidget {
@@ -102,7 +102,7 @@ class _HomeCardState extends State<HomeCard> {
                   Text(widget.homestay.location,
                       style: TextStyle(color: Colors.grey[600])),
                   const SizedBox(height: 5),
-                  Text(widget.homestay.guests,
+                  Text(widget.homestay.guests.toString(),
                       style: TextStyle(color: Colors.grey[600])),
                   const SizedBox(height: 5),
                   Text(
