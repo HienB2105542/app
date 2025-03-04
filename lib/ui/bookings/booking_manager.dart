@@ -59,7 +59,7 @@ class BookingManager extends ChangeNotifier {
 
     return bookings
         .where((booking) =>
-            booking.homestayName.toLowerCase().contains(query.toLowerCase()) ||
+            booking.homestayId.toLowerCase().contains(query.toLowerCase()) ||
             booking.location.toLowerCase().contains(query.toLowerCase()))
         .toList();
   }
