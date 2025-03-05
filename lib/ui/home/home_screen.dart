@@ -3,7 +3,7 @@ import 'home.dart';
 import 'profile_screen.dart';
 import '../favorites/favorites_screen.dart';
 import '../bookings/booking_screen.dart';
-import 'create_post_create.dart';
+import 'create_post_screen.dart';
 import '../../models/homestay.dart';
 import '../auth/login_screen.dart';
 
