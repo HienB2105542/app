@@ -293,7 +293,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       try {
         // Lưu homestay vào PocketBase
         final success = await _homeService.createHomestay(newHomestay,
-            featuredImage: _useAssetImage ? null : _selectedFile);
+            featuredImage: _selectedFile);
 
         setState(() {
           _isLoading = false;
