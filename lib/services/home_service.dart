@@ -16,7 +16,7 @@ class HomeService {
             name: record.data['name'],
             description: record.data['description'],
             location: record.data['location'],
-            imageUrl: _getImageUrl(record),
+            imageUrl: getImageUrl(record),
             price: record.data['price'].toDouble(),
             rooms: record.data['rooms'],
             guests: record.data['guests']);
@@ -28,16 +28,26 @@ class HomeService {
   }
 
    // Hàm lấy URL ảnh từ PocketBase
-  String _getImageUrl(RecordModel record) {
-    if (record.data.containsKey('image') && record.data['image'] != '') {
-      // PocketBase tự động tạo URL cho file đã tải lên
+  // String getImageUrl(RecordModel record) {
+  //   if (record.data.containsKey('image') && record.data['image'] != '') {
+  //     // PocketBase tự động tạo URL cho file đã tải lên
+  //     return '${pb.baseUrl}/api/files/${record.collectionId}/${record.id}/${record.data['image']}';
+  //   } else if (record.data.containsKey('imageUrl') &&
+  //       record.data['imageUrl'] != '') {
+  //     return record.data['imageUrl'];
+  //   }
+  //   return '';
+  // }
+  String getImageUrl(RecordModel record) {
+    if (record.data.containsKey('image') && record.data['image'].isNotEmpty) {
       return '${pb.baseUrl}/api/files/${record.collectionId}/${record.id}/${record.data['image']}';
     } else if (record.data.containsKey('imageUrl') &&
-        record.data['imageUrl'] != '') {
+        record.data['imageUrl'].isNotEmpty) {
       return record.data['imageUrl'];
     }
-    return '';
+    return ''; // Trả về rỗng nếu không có ảnh
   }
+
 
   Future<bool> createHomestay(Homestay homestay, {File? featuredImage}) async {
     try {

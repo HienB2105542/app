@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import '../home/detail_screen.dart';
 import '../../models/homestay.dart';
@@ -64,34 +66,7 @@ class _HomeCardState extends State<HomeCard> {
                     borderRadius:
                         const BorderRadius.vertical(top: Radius.circular(10)),
                     child: widget.homestay.imageUrl.startsWith('http')
-                      ? Image.network(
-                        widget.homestay.imageUrl,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                        errorBuilder:(context, error, stackTrace) {
-                          return Container(
-                            color: Colors.grey[300],
-                            child: const Icon(
-                              Icons.image_not_supported,
-                              size: 50,
-                              color: Colors.grey,
-                            ),
-                          );
-                        },
-                        loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress == null) return child;
-                              return Center(
-                                child: CircularProgressIndicator(
-                                  value: loadingProgress.expectedTotalBytes !=
-                                          null
-                                      ? loadingProgress.cumulativeBytesLoaded /
-                                          loadingProgress.expectedTotalBytes!
-                                      : null,
-                                ),
-                              );
-                            },
-                          )
-                        : Image.asset(
+                        ? Image.network(
                             widget.homestay.imageUrl,
                             width: double.infinity,
                             fit: BoxFit.cover,
@@ -105,7 +80,24 @@ class _HomeCardState extends State<HomeCard> {
                                 ),
                               );
                             },
+                          )
+                        : Image.file(
+                            File(widget.homestay
+                                .imageUrl), // Lấy ảnh từ thư viện máy ảo
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Container(
+                                color: Colors.grey[300],
+                                child: const Icon(
+                                  Icons.image_not_supported,
+                                  size: 50,
+                                  color: Colors.grey,
+                                ),
+                              );
+                            },
                           ),
+
                   ),
                   Positioned(
                     top: 10,

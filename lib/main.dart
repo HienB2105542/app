@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:homestay/ui/home/home_manager.dart';
-import 'package:path/path.dart';
 import 'ui/screens.dart';
 import 'ui/home/home_screen.dart';
 import 'ui/bookings/booking_screen.dart';

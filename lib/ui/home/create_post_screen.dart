@@ -23,7 +23,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   final TextEditingController _priceController = TextEditingController();
 
   File? _selectedFile;
-  bool _useAssetImage = true;
   bool _isLoading = false;
 
   final HomeService _homeService = HomeService();
@@ -36,7 +35,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     if (pickedFile != null) {
       setState(() {
         _selectedFile = File(pickedFile.path);
-        _useAssetImage = false;
       });
     }
   }
@@ -191,7 +189,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                     onPressed: () {
                                       setState(() {
                                         _selectedFile = null;
-                                        _useAssetImage = false;
                                       });
                                     },
                                   ),
