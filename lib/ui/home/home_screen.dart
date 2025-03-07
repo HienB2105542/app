@@ -28,7 +28,6 @@ class _HomeScreenState extends State<HomeScreen> {
         Provider.of<HomeManager>(context, listen: false).fetchHomestays());
   }
 
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -45,11 +44,6 @@ class _HomeScreenState extends State<HomeScreen> {
         favoriteHomestays.removeWhere((item) => item.name == homestay.name);
       }
     });
-  }
-
-  void _fetchHomestays() async {
-    await HomeManager().fetchHomestays();
-    setState(() {});
   }
 
   @override

@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:homestay/ui/home/home_manager.dart';
+// import 'package:homestay/ui/home/home_manager.dart';
 import 'ui/screens.dart';
 import 'ui/home/home_screen.dart';
 import 'ui/bookings/booking_screen.dart';
 import 'ui/auth/login_screen.dart';
 import 'ui/home/profile_screen.dart';
-import 'package:provider/provider.dart';
+// import 'package:provider/provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
-  runApp(
-    ChangeNotifierProvider(
-      create: (context) => HomeManager()..fetchHomestays(),
-      child: const MyApp(),
-    )
-  );
+void main() async{
+  await dotenv.load();
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {

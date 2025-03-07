@@ -26,18 +26,6 @@ class HomeService {
       return [];
     }
   }
-
-   // Hàm lấy URL ảnh từ PocketBase
-  // String getImageUrl(RecordModel record) {
-  //   if (record.data.containsKey('image') && record.data['image'] != '') {
-  //     // PocketBase tự động tạo URL cho file đã tải lên
-  //     return '${pb.baseUrl}/api/files/${record.collectionId}/${record.id}/${record.data['image']}';
-  //   } else if (record.data.containsKey('imageUrl') &&
-  //       record.data['imageUrl'] != '') {
-  //     return record.data['imageUrl'];
-  //   }
-  //   return '';
-  // }
   String getImageUrl(RecordModel record) {
     if (record.data.containsKey('image') && record.data['image'].isNotEmpty) {
       return '${pb.baseUrl}/api/files/${record.collectionId}/${record.id}/${record.data['image']}';
@@ -47,7 +35,6 @@ class HomeService {
     }
     return ''; // Trả về rỗng nếu không có ảnh
   }
-
 
   Future<bool> createHomestay(Homestay homestay, {File? featuredImage}) async {
     try {
