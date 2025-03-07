@@ -65,7 +65,7 @@ class _HomeCardState extends State<HomeCard> {
                   ClipRRect(
                     borderRadius:
                         const BorderRadius.vertical(top: Radius.circular(10)),
-                    child: widget.homestay.imageUrl.startsWith('http')
+                    child: widget.homestay.imageUrl.isNotEmpty
                         ? Image.network(
                             widget.homestay.imageUrl,
                             width: double.infinity,

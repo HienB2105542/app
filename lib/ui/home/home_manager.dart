@@ -25,10 +25,19 @@ class HomeManager with ChangeNotifier {
   }
 
   Future<void> fetchHomestays() async {
-    _homestays = await _homeService.getHomestays();
-    for (var homestay in _homestays) {
-      print("Homestay: ${homestay.toJson()}");
+    try {
+      List<Homestay>? fetchedHomestays = await _homeService.getHomestays();
+
+      // Kiểm tra nếu fetchedHomestays là null thì gán danh sách rỗng
+      _homestays = fetchedHomestays;
+
+      for (var homestay in _homestays) {
+        print("Homestay: ${homestay.toJson()}");
+      }
+
+      notifyListeners();
+    } catch (error) {
+      print("Lỗi khi lấy danh sách homestays: $error");
     }
-    notifyListeners();
   }
 }

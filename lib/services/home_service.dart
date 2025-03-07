@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:homestay/services/auth_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:pocketbase/pocketbase.dart';
 import '../models/homestay.dart';
@@ -26,19 +27,28 @@ class HomeService {
       return [];
     }
   }
+
   String getImageUrl(RecordModel record) {
-    if (record.data.containsKey('image') && record.data['image'].isNotEmpty) {
-      return '${pb.baseUrl}/api/files/${record.collectionId}/${record.id}/${record.data['image']}';
-    } else if (record.data.containsKey('imageUrl') &&
-        record.data['imageUrl'].isNotEmpty) {
-      return record.data['imageUrl'];
-    }
-    return ''; // Trả về rỗng nếu không có ảnh
+  if (record.data.containsKey('image') && record.data['image'].isNotEmpty) {
+    return '${pb.baseUrl}/api/files/${record.collectionId}/${record.id}/${record.data['image']}';
   }
+  return ''; // Trả về rỗng nếu không có ảnh
+}
+
 
   Future<bool> createHomestay(Homestay homestay, {File? featuredImage}) async {
     try {
-      final formData = {
+      final authService = AuthService();
+      final userId = await authService.getUserId(); // Lấy userId hiện tại
+      print("User ID lấy được: $userId");
+
+      if (userId == null) {
+        print("Lỗi: không tìm thấy userId, Vui lòng đăng nhập.");
+        return false;
+      }
+
+      // Tạo form dữ liệu
+      final formData = <String, dynamic>{
         'name': homestay.name,
         'description': homestay.description,
         'location': homestay.location,
@@ -46,48 +56,42 @@ class HomeService {
         'rooms': homestay.rooms,
         'price': homestay.price,
         'isFavorite': homestay.isFavorite,
+        'userId': userId, // Lưu ID người dùng vào bài đăng
       };
 
-      // Nếu có ảnh, tải ảnh lên
+      print("Dữ liệu gửi lên API: $formData");
+
+      final request = http.MultipartRequest(
+        'POST',
+        Uri.parse('${pb.baseUrl}/api/collections/homestays/records'),
+      );
+
+      // Thêm các trường dữ liệu vào request
+      formData.forEach((key, value) {
+        request.fields[key] = value.toString();
+      });
+
+      // Nếu có ảnh, thêm ảnh vào request
       if (featuredImage != null) {
-        final request = http.MultipartRequest(
-          'POST',
-          Uri.parse('${pb.baseUrl}/api/collections/homestays/records'),
-        );
-
-        // Thêm các trường dữ liệu
-        formData.forEach((key, value) {
-          request.fields[key] = value.toString();
-        });
-
-        featuredImage.path.split('.').last.toLowerCase();
-
         request.files.add(
           await http.MultipartFile.fromPath(
-            'image',
+            'image', // Tên cột ảnh trên PocketBase
             featuredImage.path,
           ),
         );
-
-        // Thêm header xác thực nếu cần
-        if (pb.authStore.isValid) {
-          request.headers['Authorization'] = 'Bearer ${pb.authStore.token}';
-        }
-
-        // Gửi request
-        final response = await request.send();
-
-        return response.statusCode >= 200 && response.statusCode < 300;
-      } else if (homestay.imageUrl.isNotEmpty) {
-        // Nếu có imageUrl (từ assets hoặc URL khác)
-        formData['imageUrl'] = homestay.imageUrl;
-        await pb.collection('homestays').create(body: formData);
-        return true;
-      } else {
-        // Không có ảnh
-        await pb.collection('homestays').create(body: formData);
-        return true;
       }
+
+      // Thêm header xác thực nếu cần
+      if (pb.authStore.isValid) {
+        request.headers['Authorization'] = 'Bearer ${pb.authStore.token}';
+      }
+
+      // Gửi request
+      final response = await request.send();
+      final responseBody = await response.stream.bytesToString();
+      print("Phản hồi từ PocketBase: $responseBody");
+
+      return response.statusCode >= 200 && response.statusCode < 300;
     } catch (e) {
       print("Lỗi khi tạo homestay: $e");
       return false;

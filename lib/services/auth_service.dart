@@ -6,6 +6,18 @@ class AuthService {
   final String pocketBaseUrl =
       'http://127.0.0.1:8090/api/collections/users/auth-with-password';
 
+  //lấy thông tin tài khoản
+  Future<String?> getUserId() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userData = prefs.getString('user');
+    print("Lấy dữ liệu user từ Share: $userData"); //Db
+    if (userData != null) {
+      final decodedData = jsonDecode(userData);
+      return decodedData['id'];
+    }
+    return null;
+  }
+
   // Đăng nhập
   Future<bool> login(String email, String password) async {
     try {
@@ -15,9 +27,15 @@ class AuthService {
         body: jsonEncode({'identity': email, 'password': password}),
       );
 
+      print("📡 API response: ${response.body}"); //Xem dữ liệu trả về từ API
+
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         await saveUserData(data);
+
+        final userId = await getUserId();
+        print("User ID sau khi đăng nhập: $userId");
+        
         return true;
       } else {
         print('Lỗi đăng nhập: ${response.body}');
@@ -48,6 +66,7 @@ class AuthService {
   // Lưu thông tin đăng nhập
   Future<void> saveUserData(Map<String, dynamic> data) async {
     final prefs = await SharedPreferences.getInstance();
+    print("Dữ liệu trước khi lưu: ${jsonEncode(data)}");
     if (data.containsKey('record')) {
       await prefs.setString('user', jsonEncode(data['record']));
       await prefs.setString('token', data['token']);
@@ -78,5 +97,13 @@ class AuthService {
   Future<bool> isLoggedIn() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.containsKey('token');
+  }
+
+  Future<void> debugLoginState() async {
+    final userId = await getUserId();
+    final isLogged = await isLoggedIn();
+
+    print("User ID: $userId");
+    print("Đã đăng nhập? $isLogged");
   }
 }
