@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'home_manager.dart';
 import 'home_card.dart';
 import '../../models/homestay.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatelessWidget {
   final List<Homestay> favoriteHomestays;
@@ -29,7 +30,7 @@ class Home extends StatelessWidget {
                 const SizedBox(height: 25),
                 _buildCategorySection(),
                 const SizedBox(height: 25),
-                _buildHomestayGrid(),
+                _buildHomestayGrid(context),
                 const SizedBox(height: 20),
               ],
             ),
@@ -257,7 +258,9 @@ class Home extends StatelessWidget {
     );
   }
 
-  Widget _buildHomestayGrid() {
+  Widget _buildHomestayGrid(BuildContext context) {
+    final homeManager = Provider.of<HomeManager>(context);
+    final homestays = homeManager.homestays;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -288,10 +291,10 @@ class Home extends StatelessWidget {
             mainAxisSpacing: 15,
             childAspectRatio: 0.65,
           ),
-          itemCount: HomeManager().homestays.length,
+          itemCount: homestays.length,
           itemBuilder: (context, index) {
             return HomeCard(
-              homestay: HomeManager().homestays[index],
+              homestay: homestays[index],
               favoriteHomestays: favoriteHomestays,
               onFavoriteToggle: onFavoriteToggle,
             );

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'home.dart';
-import 'profile_screen.dart';
-import '../favorites/favorites_screen.dart';
-import '../bookings/booking_screen.dart';
-import 'create_post_screen.dart';
+
 import '../../models/homestay.dart';
 import '../auth/login_screen.dart';
+import '../bookings/booking_screen.dart';
+import '../favorites/favorites_screen.dart';
+import 'create_post_screen.dart';
+import 'home.dart';
+import 'home_manager.dart';
+import 'profile_screen.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,6 +20,14 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   List<Homestay> favoriteHomestays = [];
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() =>
+        Provider.of<HomeManager>(context, listen: false).fetchHomestays());
+  }
+
 
   void _onItemTapped(int index) {
     setState(() {
@@ -34,6 +45,11 @@ class _HomeScreenState extends State<HomeScreen> {
         favoriteHomestays.removeWhere((item) => item.name == homestay.name);
       }
     });
+  }
+
+  void _fetchHomestays() async {
+    await HomeManager().fetchHomestays();
+    setState(() {});
   }
 
   @override

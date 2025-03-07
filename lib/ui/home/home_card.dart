@@ -29,7 +29,7 @@ class _HomeCardState extends State<HomeCard> {
 
   void _checkIfFavorite() {
     for (var favorite in widget.favoriteHomestays) {
-      if (favorite.name == widget.homestay.name) {
+      if (favorite.id == widget.homestay.id) {
         setState(() {
           isFavorite = true;
         });
@@ -63,11 +63,49 @@ class _HomeCardState extends State<HomeCard> {
                   ClipRRect(
                     borderRadius:
                         const BorderRadius.vertical(top: Radius.circular(10)),
-                    child: Image.asset(
-                      widget.homestay.imageUrl,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                    ),
+                    child: widget.homestay.imageUrl.startsWith('http')
+                      ? Image.network(
+                        widget.homestay.imageUrl,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                        errorBuilder:(context, error, stackTrace) {
+                          return Container(
+                            color: Colors.grey[300],
+                            child: const Icon(
+                              Icons.image_not_supported,
+                              size: 50,
+                              color: Colors.grey,
+                            ),
+                          );
+                        },
+                        loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  value: loadingProgress.expectedTotalBytes !=
+                                          null
+                                      ? loadingProgress.cumulativeBytesLoaded /
+                                          loadingProgress.expectedTotalBytes!
+                                      : null,
+                                ),
+                              );
+                            },
+                          )
+                        : Image.asset(
+                            widget.homestay.imageUrl,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Container(
+                                color: Colors.grey[300],
+                                child: const Icon(
+                                  Icons.image_not_supported,
+                                  size: 50,
+                                  color: Colors.grey,
+                                ),
+                              );
+                            },
+                          ),
                   ),
                   Positioned(
                     top: 10,
@@ -96,17 +134,42 @@ class _HomeCardState extends State<HomeCard> {
                   Text(
                     widget.homestay.name,
                     style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.bold),
+                      fontSize: 16, fontWeight: FontWeight.bold),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 5),
-                  Text(widget.homestay.location,
-                      style: TextStyle(color: Colors.grey[600])),
+                  Row(
+                    children: [
+                      const Icon(Icons.location_on,
+                          color: Colors.redAccent, size: 14),
+                      const SizedBox(width: 2),
+                      Expanded(
+                        child: Text(
+                          widget.homestay.location,
+                          style:
+                              TextStyle(color: Colors.grey[600], fontSize: 12),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: 5),
-                  Text(widget.homestay.guests.toString(),
-                      style: TextStyle(color: Colors.grey[600])),
+                  Row(
+                    children: [
+                      const Icon(Icons.people,
+                          color: Colors.blueGrey, size: 14),
+                      const SizedBox(width: 2),
+                      Text(
+                        "${widget.homestay.guests} khách · ${widget.homestay.rooms} phòng",
+                        style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: 5),
                   Text(
-                    widget.homestay.price.toString(),
+                    "${widget.homestay.price.toStringAsFixed(0)} VND/đêm",
                     style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,

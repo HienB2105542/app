@@ -5,10 +5,10 @@ class ProfileHeader extends StatelessWidget {
   final VoidCallback onEditProfile;
 
   const ProfileHeader({
-    Key? key,
+    super.key,
     required this.userData,
     required this.onEditProfile,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -48,10 +48,13 @@ class ProfileHeader extends StatelessWidget {
                   radius: 60,
                   backgroundColor: Colors.white,
                   backgroundImage: (userData?['avatar'] != null &&
-                          userData!['avatar'].isNotEmpty)
+                          userData!['avatar'].isNotEmpty &&
+                          Uri.tryParse(userData!['avatar'])?.hasAbsolutePath ==
+                              true)
                       ? NetworkImage(userData!['avatar'])
                       : const AssetImage('assets/images/logo.png')
                           as ImageProvider,
+
                 ),
               ),
               Positioned(

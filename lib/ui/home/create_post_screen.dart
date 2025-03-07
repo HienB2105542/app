@@ -49,34 +49,37 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         backgroundColor: Colors.redAccent,
       ),
       body: _isLoading
-      ? const Center(child: CircularProgressIndicator(),)
-      : SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "Thông tin Homestay",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 20),
-              TextFormField(
-                controller: _nameController,
-                decoration: const InputDecoration(
-                  labelText: "Tên Homestay",
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.house),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Vui lòng nhập tên Homestay";
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 15),
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Thông tin Homestay",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      controller: _nameController,
+                      decoration: const InputDecoration(
+                        labelText: "Tên Homestay",
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.house),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Vui lòng nhập tên Homestay";
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 15),
                     TextFormField(
                       controller: _descriptionController,
                       maxLines: 3,
@@ -91,24 +94,24 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                         }
                         return null;
                       },
-                ),
-              const SizedBox(height: 15),
-              TextFormField(
-                controller: _locationController,
-                decoration: const InputDecoration(
-                  labelText: "Địa điểm",
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.location_on),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Vui lòng nhập địa điểm";
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 15),
-              Row(
+                    ),
+                    const SizedBox(height: 15),
+                    TextFormField(
+                      controller: _locationController,
+                      decoration: const InputDecoration(
+                        labelText: "Địa điểm",
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.location_on),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Vui lòng nhập địa điểm";
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 15),
+                    Row(
                       children: [
                         Expanded(
                           child: TextFormField(
@@ -147,97 +150,100 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                         ),
                       ],
                     ),
-              const SizedBox(height: 15),
-              TextFormField(
-                controller: _priceController,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  labelText: "Giá (VD: 1.200.000 VND/đêm)",
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.monetization_on),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Vui lòng nhập giá Homestay";
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 20),
-              Column(
-                children: [
-                  const SizedBox(height: 10),
-                  _selectedFile != null
-                      ? Stack(
-                          alignment: Alignment.topRight,
-                          children: [
-                            Container(
-                              height: 150,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                              ),
-                              child: Image.file(
-                                _selectedFile!,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.close, color: Colors.red),
-                              onPressed: () {
-                                setState(() {
-                                  _selectedFile = null;
-                                  _useAssetImage = false;
-                                });
-                              },
-                            ),
-                          ],
-                        )
-                      : Container(
-                          height: 150,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(Icons.image, size: 50, color: Colors.grey),
-                              const SizedBox(height: 10),
-                              ElevatedButton.icon(
-                                onPressed: _pickImage,
-                                icon: const Icon(Icons.add_photo_alternate),
-                                label: const Text("Chọn ảnh"),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.redAccent,
-                                  foregroundColor: Colors.white,
+                    const SizedBox(height: 15),
+                    TextFormField(
+                      controller: _priceController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        labelText: "Giá (VD: 1.200.000 VND/đêm)",
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.monetization_on),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Vui lòng nhập giá Homestay";
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    Column(
+                      children: [
+                        const SizedBox(height: 10),
+                        _selectedFile != null
+                            ? Stack(
+                                alignment: Alignment.topRight,
+                                children: [
+                                  Container(
+                                    height: 150,
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey),
+                                    ),
+                                    child: Image.file(
+                                      _selectedFile!,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.close,
+                                        color: Colors.red),
+                                    onPressed: () {
+                                      setState(() {
+                                        _selectedFile = null;
+                                        _useAssetImage = false;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              )
+                            : Container(
+                                height: 150,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Icon(Icons.image,
+                                        size: 50, color: Colors.grey),
+                                    const SizedBox(height: 10),
+                                    ElevatedButton.icon(
+                                      onPressed: _pickImage,
+                                      icon:
+                                          const Icon(Icons.add_photo_alternate),
+                                      label: const Text("Chọn ảnh"),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.redAccent,
+                                        foregroundColor: Colors.white,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 30),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: _submitHomestay,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.redAccent,
                         ),
-                ],
-              ),            
-              const SizedBox(height: 30),
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: _submitHomestay,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.redAccent,
-                  ),
-                  child: const Text(
-                    "Đăng tin",
-                    style: TextStyle(fontSize: 18, color: Colors.white),
-                  ),
+                        child: const Text(
+                          "Đăng tin",
+                          style: TextStyle(fontSize: 18, color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 
@@ -271,7 +277,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   //     Navigator.pop(context);
   //   }
   // }
-    void _submitHomestay() async {
+  void _submitHomestay() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
