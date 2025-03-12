@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:homestay/ui/bookings/booking_form.dart';
 import '../../models/homestay.dart';
 
 class DetailScreen extends StatelessWidget {
@@ -88,12 +89,12 @@ class DetailScreen extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => BookingScreen(homestay: homestay),
-                  //   ),
-                  // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BookingFormScreen(homestay: homestay,),
+                    ),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.redAccent,

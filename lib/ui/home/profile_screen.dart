@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../services/auth_service.dart';
 import '../auth/login_screen.dart';
-import 'profile.dart'; 
+import 'profile.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -22,7 +22,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> _loadUserData() async {
     final user = await _authService.getCurrentUser();
-    print("User data: $user"); 
+    print("User data: $user");
 
     if (user != null) {
       if (mounted) {
@@ -35,7 +35,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       Future.delayed(const Duration(seconds: 3), () async {
         final retryUser = await _authService.getCurrentUser();
         if (mounted && retryUser == null) {
-          _logout(); 
+          _logout();
         }
       });
     }
@@ -99,35 +99,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     userData: userData,
                     onEditProfile: _editProfile,
                   ),
-
                   const SizedBox(height: 20),
                   ProfileInfoCard(
                     icon: Icons.phone,
                     title: 'Số điện thoại',
                     value: userData?['phone'],
-                    onTap: () {
-                    },
+                    onTap: () {},
                   ),
-
                   ProfileInfoCard(
                     icon: Icons.location_on,
                     title: 'Địa chỉ',
                     value: userData?['address'],
-                    onTap: () {
-                    },
+                    onTap: () {},
                   ),
-
                   ProfileInfoCard(
                     icon: Icons.settings,
                     title: 'Cài đặt tài khoản',
-                    onTap: () {
-                    },
+                    onTap: () {},
                   ),
-
                   const SizedBox(height: 30),
-
                   LogoutButton(onLogout: _logout),
-
                   const SizedBox(height: 20),
                 ],
               ),

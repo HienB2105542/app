@@ -1,66 +1,116 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import '../../models/booking.dart';
+import '../../services/book_service.dart';
 
-enum BookingStatus { upcoming, completed, cancelled }
+class BookingManager with ChangeNotifier {
+  final BookService _pocketBaseService = BookService();
+  List<Booking> _bookings = [];
+  bool _isLoading = false;
+  String? _error;
 
-class BookingManager extends ChangeNotifier {
-  final List<Booking> _bookings = [];
-  BookingStatus _currentFilter = BookingStatus.upcoming;
+  List<Booking> get bookings => [..._bookings];
+  bool get isLoading => _isLoading;
+  String? get error => _error;
 
-  List<Booking> get bookings {
-    if (_currentFilter == BookingStatus.upcoming) {
-      return _bookings
-          .where((booking) =>
-              booking.status == 'confirmed' || booking.status == 'pending')
-          .toList();
-    } else if (_currentFilter == BookingStatus.completed) {
-      return _bookings
-          .where((booking) => booking.status == 'completed')
-          .toList();
-    } else {
-      return _bookings
-          .where((booking) => booking.status == 'cancelled')
-          .toList();
+  // Lấy tất cả bookings của người dùng
+  Future<void> fetchBookings(String userId) async {
+    _setLoading(true);
+    try {
+      _bookings = await _pocketBaseService.getBookings(userId);
+      _error = null;
+    } catch (error) {
+      _error = 'Không thể tải danh sách đặt phòng.';
+      print(error);
     }
+    _setLoading(false);
   }
 
-  List<Booking> get allBookings => _bookings;
-
-  BookingStatus get currentFilter => _currentFilter;
-
-  void setFilter(BookingStatus filter) {
-    _currentFilter = filter;
-    notifyListeners();
-  }
-
-  void addBooking(Booking booking) {
-    _bookings.add(booking);
-    notifyListeners();
-  }
-
-  void removeBooking(String id) {
-    _bookings.removeWhere((booking) => booking.id == id);
-    notifyListeners();
-  }
-
-  void updateBookingStatus(String id, String status) {
-    final index = _bookings.indexWhere((booking) => booking.id == id);
-    if (index != -1) {
-      _bookings[index] = _bookings[index].copyWith(status: status);
+  // Thêm booking mới
+Future<bool> addBooking(Booking booking) async {
+  _setLoading(true);
+  try {
+    print("Gửi dữ liệu đặt phòng: ${booking.toJson()}"); // In dữ liệu trước khi gửi
+    final success = await _pocketBaseService.createBooking(booking);
+    
+    if (success) {
+      _bookings.add(booking);
+      _error = null;
       notifyListeners();
     }
+    
+    _setLoading(false);
+    return success;
+  } catch (error) {
+    _error = 'Không thể tạo đặt phòng mới.';
+    _setLoading(false);
+    print("Lỗi khi đặt phòng: $error"); // In lỗi chi tiết
+    return false;
+  }
+}
+
+
+  // Xác nhận booking (cho admin)
+  Future<bool> confirmBooking(String bookingId) async {
+    return await _updateBookingStatus(bookingId, 'confirmed');
   }
 
-  // Method to search bookings
-  List<Booking> searchBookings(String query) {
-    if (query.isEmpty) {
-      return bookings;
-    }
+  // Hoàn thành booking
+  Future<bool> completeBooking(String bookingId) async {
+    return await _updateBookingStatus(bookingId, 'completed');
+  }
 
-    return bookings
-        .where((booking) =>
-            booking.homestayId.toLowerCase().contains(query.toLowerCase()) ||
-            booking.location.toLowerCase().contains(query.toLowerCase()))
-        .toList();
+  // Hủy booking
+  Future<bool> cancelBooking(String bookingId) async {
+    return await _updateBookingStatus(bookingId, 'cancelled');
+  }
+
+  // Xóa booking
+  Future<bool> deleteBooking(String bookingId) async {
+    _setLoading(true);
+    try {
+      final success = await _pocketBaseService.deleteBooking(bookingId);
+      if (success) {
+        _bookings.removeWhere((booking) => booking.id == bookingId);
+        _error = null;
+        notifyListeners();
+      }
+      _setLoading(false);
+      return success;
+    } catch (error) {
+      _error = 'Không thể xóa đặt phòng.';
+      _setLoading(false);
+      print(error);
+      return false;
+    }
+  }
+
+  // Cập nhật trạng thái booking
+  Future<bool> _updateBookingStatus(String bookingId, String status) async {
+    _setLoading(true);
+    try {
+      final success =
+          await _pocketBaseService.updateBookingStatus(bookingId, status);
+      if (success) {
+        final index =
+            _bookings.indexWhere((booking) => booking.id == bookingId);
+        if (index >= 0) {
+          _bookings[index] = _bookings[index].copyWith(status: status);
+          _error = null;
+          notifyListeners();
+        }
+      }
+      _setLoading(false);
+      return success;
+    } catch (error) {
+      _error = 'Không thể cập nhật trạng thái đặt phòng.';
+      _setLoading(false);
+      print(error);
+      return false;
+    }
+  }
+
+  void _setLoading(bool value) {
+    _isLoading = value;
+    notifyListeners();
   }
 }

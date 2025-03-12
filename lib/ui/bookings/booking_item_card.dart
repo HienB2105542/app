@@ -1,9 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../models/booking.dart';
+import 'booking_manager.dart';
+import 'package:intl/intl.dart';
+
 class BookingItemCard extends StatelessWidget {
-  const BookingItemCard({super.key});
+  final Booking booking;
+  final bool isAdmin;
+
+  const BookingItemCard({
+    super.key,
+    required this.booking,
+    this.isAdmin = false,
+  });
+
+  // Lấy màu dựa trên trạng thái
+  Color _getStatusColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'confirmed':
+        return Colors.green;
+      case 'pending':
+        return Colors.orange;
+      case 'cancelled':
+        return Colors.red;
+      case 'completed':
+        return Colors.blue;
+      default:
+        return Colors.grey;
+    }
+  }
+
+  // Lấy Text hiển thị trạng thái
+  String _getStatusText(String status) {
+    switch (status.toLowerCase()) {
+      case 'confirmed':
+        return 'Đã xác nhận';
+      case 'pending':
+        return 'Chờ xác nhận';
+      case 'cancelled':
+        return 'Đã hủy';
+      case 'completed':
+        return 'Đã hoàn thành';
+      default:
+        return 'Không xác định';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final dateFormat = DateFormat('dd/MM/yyyy');
+    final checkInDate = dateFormat.format(booking.checkInDate);
+    final checkOutDate = dateFormat.format(booking.checkOutDate);
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
@@ -27,11 +75,6 @@ class BookingItemCard extends StatelessWidget {
                   topLeft: Radius.circular(12),
                   topRight: Radius.circular(12),
                 ),
-                child: Image.asset('assets/images/laocai.jpg',
-                  height: 150,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
               ),
               Positioned(
                 top: 12,
@@ -40,12 +83,12 @@ class BookingItemCard extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: Colors.green,
+                    color: _getStatusColor(booking.status),
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: const Text(
-                    'Confirmed',
-                    style: TextStyle(
+                  child: Text(
+                    _getStatusText(booking.status),
+                    style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 12,
@@ -66,7 +109,8 @@ class BookingItemCard extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        'Cozy Mountain Homestay',
+                        booking
+                            .homestayName, // Sử dụng homestayName thay vì homestayId
                         style:
                             Theme.of(context).textTheme.titleMedium?.copyWith(
                                   fontWeight: FontWeight.bold,
@@ -74,14 +118,16 @@ class BookingItemCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    Row(
-                      children: const [
-                        Icon(Icons.star, color: Colors.amber, size: 18),
-                        SizedBox(width: 4),
-                        Text('4.8',
-                            style: TextStyle(fontWeight: FontWeight.bold)),
-                      ],
-                    ),
+                    if (booking.rating > 0)
+                      Row(
+                        children: [
+                          const Icon(Icons.star, color: Colors.amber, size: 18),
+                          const SizedBox(width: 4),
+                          Text('${booking.rating}',
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold)),
+                        ],
+                      ),
                   ],
                 ),
                 const SizedBox(height: 8),
@@ -91,7 +137,7 @@ class BookingItemCard extends StatelessWidget {
                     const SizedBox(width: 4),
                     Expanded(
                       child: Text(
-                        'Sapa, Lao Cai, Vietnam',
+                        booking.location,
                         style: TextStyle(color: Colors.grey.shade600),
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -113,7 +159,7 @@ class BookingItemCard extends StatelessWidget {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            'Feb 19, 2025',
+                            checkInDate,
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
@@ -135,7 +181,7 @@ class BookingItemCard extends StatelessWidget {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            'Feb 22, 2025',
+                            checkOutDate,
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
@@ -144,6 +190,23 @@ class BookingItemCard extends StatelessWidget {
                                 ),
                           ),
                         ],
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Tổng tiền:',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      '${booking.totalPrice.toStringAsFixed(0)} đ',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.redAccent,
                       ),
                     ),
                   ],
@@ -160,40 +223,219 @@ class BookingItemCard extends StatelessWidget {
                 bottomRight: Radius.circular(12),
               ),
             ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextButton.icon(
-                    icon: const Icon(Icons.chat_outlined),
-                    label: const Text('Message'),
-                    onPressed: () {
-                      // Message host
-                    },
-                    style: TextButton.styleFrom(
-                      foregroundColor: Colors.blue.shade700,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                    ),
-                  ),
-                ),
-                const VerticalDivider(width: 1, indent: 8, endIndent: 8),
-                Expanded(
-                  child: TextButton.icon(
-                    icon: const Icon(Icons.info_outline),
-                    label: const Text('Details'),
-                    onPressed: () {
-                      // View booking details
-                    },
-                    style: TextButton.styleFrom(
-                      foregroundColor: Colors.blue.shade700,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            child: _buildActionButtons(context),
           ),
         ],
       ),
     );
+  }
+
+  Widget _buildActionButtons(BuildContext context) {
+    // Các phương thức _buildActionButtons, _buildAdminActions, và _buildUserActions giữ nguyên từ mã gốc
+    // Nếu đã hủy thì không hiển thị các nút hành động
+    if (booking.status.toLowerCase() == 'cancelled') {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
+        child: Center(
+          child: Text(
+            'Đặt phòng đã bị hủy',
+            style: TextStyle(color: Colors.grey.shade700),
+          ),
+        ),
+      );
+    }
+
+    // Nếu là admin
+    if (isAdmin) {
+      return _buildAdminActions(context);
+    }
+
+    // Nếu là người dùng
+    return _buildUserActions(context);
+  }
+
+  Widget _buildAdminActions(BuildContext context) {
+    final bookingManager = Provider.of<BookingManager>(context, listen: false);
+
+    if (booking.status.toLowerCase() == 'pending') {
+      return Row(
+        children: [
+          Expanded(
+            child: TextButton.icon(
+              icon: const Icon(Icons.check_circle_outline),
+              label: const Text('Xác nhận'),
+              onPressed: () async {
+                final success = await bookingManager.confirmBooking(booking.id);
+                if (success) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Đã xác nhận đặt phòng'),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                }
+              },
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.green,
+                padding: const EdgeInsets.symmetric(vertical: 12),
+              ),
+            ),
+          ),
+          const VerticalDivider(width: 1, indent: 8, endIndent: 8),
+          Expanded(
+            child: TextButton.icon(
+              icon: const Icon(Icons.cancel_outlined),
+              label: const Text('Từ chối'),
+              onPressed: () async {
+                final success = await bookingManager.cancelBooking(booking.id);
+                if (success) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Đã từ chối đặt phòng'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+              },
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.red,
+                padding: const EdgeInsets.symmetric(vertical: 12),
+              ),
+            ),
+          ),
+        ],
+      );
+    } else if (booking.status.toLowerCase() == 'confirmed') {
+      return Row(
+        children: [
+          Expanded(
+            child: TextButton.icon(
+              icon: const Icon(Icons.check_circle),
+              label: const Text('Hoàn thành'),
+              onPressed: () async {
+                final success =
+                    await bookingManager.completeBooking(booking.id);
+                if (success) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Đặt phòng đã hoàn thành'),
+                      backgroundColor: Colors.blue,
+                    ),
+                  );
+                }
+              },
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.blue,
+                padding: const EdgeInsets.symmetric(vertical: 12),
+              ),
+            ),
+          ),
+          const VerticalDivider(width: 1, indent: 8, endIndent: 8),
+          Expanded(
+            child: TextButton.icon(
+              icon: const Icon(Icons.info_outline),
+              label: const Text('Chi tiết'),
+              onPressed: () {
+                // Hiển thị chi tiết booking
+              },
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.blue.shade700,
+                padding: const EdgeInsets.symmetric(vertical: 12),
+              ),
+            ),
+          ),
+        ],
+      );
+    } else {
+      return Row(
+        children: [
+          Expanded(
+            child: TextButton.icon(
+              icon: const Icon(Icons.info_outline),
+              label: const Text('Chi tiết'),
+              onPressed: () {
+                // Hiển thị chi tiết booking
+              },
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.blue.shade700,
+                padding: const EdgeInsets.symmetric(vertical: 12),
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+  }
+
+  Widget _buildUserActions(BuildContext context) {
+    final bookingManager = Provider.of<BookingManager>(context, listen: false);
+
+    if (booking.status.toLowerCase() == 'pending' ||
+        booking.status.toLowerCase() == 'confirmed') {
+      return Row(
+        children: [
+          Expanded(
+            child: TextButton.icon(
+              icon: const Icon(Icons.message_outlined),
+              label: const Text('Nhắn tin'),
+              onPressed: () {
+                // Tính năng nhắn tin
+              },
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.blue.shade700,
+                padding: const EdgeInsets.symmetric(vertical: 12),
+              ),
+            ),
+          ),
+          const VerticalDivider(width: 1, indent: 8, endIndent: 8),
+          Expanded(
+            child: TextButton.icon(
+              icon: const Icon(Icons.cancel_outlined),
+              label: const Text('Hủy đặt phòng'),
+              onPressed: () async {
+                // Hiển thị dialog xác nhận trước khi hủy
+                final confirm = await showDialog<bool>(
+                  context: context,
+                  builder: (ctx) => AlertDialog(
+                    title: const Text('Xác nhận hủy'),
+                    content: const Text(
+                        'Bạn có chắc chắn muốn hủy đặt phòng này không?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(ctx).pop(false),
+                        child: const Text('Không'),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.of(ctx).pop(true),
+                        child: const Text('Có'),
+                      ),
+                    ],
+                  ),
+                );
+
+                if (confirm == true) {
+                  final success =
+                      await bookingManager.cancelBooking(booking.id);
+                  if (success) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Đã hủy đặt phòng'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
+                }
+              },
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.red,
+                padding: const EdgeInsets.symmetric(vertical: 12),
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+
+    return Container(); 
   }
 }

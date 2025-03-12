@@ -37,7 +37,7 @@
 //                         const Icon(Icons.house, color: Colors.redAccent),
 //                         const SizedBox(width: 8),
 //                         Text(
-//                           booking.homestayName,
+//                           booking.homestay,
 //                           style: const TextStyle(
 //                             fontSize: 20,
 //                             fontWeight: FontWeight.bold,

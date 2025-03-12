@@ -20,7 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> loginUser() async {
     final body = jsonEncode({
-      'identity': _emailController.text, // Sử dụng email làm identity
+      'identity': _emailController.text,
       'password': _passwordController.text
     });
 
@@ -35,13 +35,13 @@ class _LoginScreenState extends State<LoginScreen> {
         final authService = AuthService();
         await authService.saveUserData(data);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Đăng nhập thành công!')),
+          const SnackBar(content: Text('Đăng nhập thành công!')),
         );
-        if(mounted){
+        if (mounted) {
           Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
-        );
+            context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+          );
         }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -51,17 +51,10 @@ class _LoginScreenState extends State<LoginScreen> {
     } catch (e) {
       print('Lỗi kết nối: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Không thể kết nối đến server!')),
+        const SnackBar(content: Text('Không thể kết nối đến server!')),
       );
     }
   }
-
-  // @override
-  // void dispose() {
-  //   _emailController.dispose();
-  //   _passwordController.dispose();
-  //   super.dispose();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
           "Đăng Nhập",
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Colors.teal,
+        backgroundColor: Colors.redAccent,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
@@ -92,7 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   const Icon(
                     Icons.house_rounded,
                     size: 80,
-                    color: Colors.teal,
+                    color: Colors.redAccent,
                   ),
                   const SizedBox(height: 20),
                   const Text(
@@ -100,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
-                      color: Colors.teal,
+                      color: Colors.redAccent,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -109,7 +102,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     controller: _emailController,
                     decoration: InputDecoration(
                       labelText: 'Email',
-                      prefixIcon: const Icon(Icons.email),
+                      prefixIcon:
+                          const Icon(Icons.email, color: Colors.redAccent),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(color: Colors.redAccent, width: 2),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -120,7 +119,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     controller: _passwordController,
                     decoration: InputDecoration(
                       labelText: 'Mật Khẩu',
-                      prefixIcon: const Icon(Icons.lock),
+                      prefixIcon:
+                          const Icon(Icons.lock, color: Colors.redAccent),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(color: Colors.redAccent, width: 2),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -130,7 +135,25 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: loginUser,
-                    child: Text('Đăng nhập'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.redAccent,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 16, horizontal: 32),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 5,
+                      shadowColor: Colors.black45,
+                    ),
+                    child: const Text(
+                      'Đăng nhập',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.2,
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 10),
                   TextButton(
@@ -139,7 +162,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                     child: const Text(
                       "Quên mật khẩu?",
-                      style: TextStyle(color: Colors.teal),
+                      style: TextStyle(color: Colors.redAccent),
                     ),
                   ),
                   const Divider(height: 30, thickness: 1),
@@ -154,7 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: const Text(
                       "Chưa có tài khoản? Đăng ký ngay",
                       style: TextStyle(
-                          color: Colors.teal,
+                          color: Colors.redAccent,
                           fontSize: 16,
                           fontWeight: FontWeight.bold),
                     ),

@@ -6,16 +6,14 @@ import 'ui/auth/login_screen.dart';
 import 'ui/home/profile_screen.dart';
 import 'package:provider/provider.dart';
 import 'ui/home/home_manager.dart';
-// import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'ui/bookings/booking_manager.dart';
 
-void main() async{
-  // await dotenv.load();
-  // runApp(const MyApp());
-
+void main() {
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => HomeManager()),
+        ChangeNotifierProvider(create: (context) => BookingManager()),
       ],
       child: MyApp(),
     ),

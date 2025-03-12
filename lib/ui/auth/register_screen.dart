@@ -53,20 +53,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
-  // @override
-  // void dispose() {
-  //   _nameController.dispose();
-  //   _emailController.dispose();
-  //   _passwordController.dispose();
-  //   super.dispose();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Đăng Ký", style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.teal,
+        backgroundColor: Colors.redAccent,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
@@ -84,14 +76,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.house_rounded, size: 80, color: Colors.teal),
+                  const Icon(Icons.house_rounded,
+                      size: 80, color: Colors.redAccent),
                   const SizedBox(height: 20),
                   const Text(
                     "Tạo Tài Khoản Homestay",
                     style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
-                        color: Colors.teal),
+                        color: Colors.redAccent),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 20),
@@ -99,7 +92,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     controller: _nameController,
                     decoration: InputDecoration(
                       labelText: 'Tên Người Dùng',
-                      prefixIcon: const Icon(Icons.person),
+                      prefixIcon: const Icon(Icons.person, color: Colors.redAccent),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10)),
                     ),
@@ -109,7 +102,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     controller: _emailController,
                     decoration: InputDecoration(
                       labelText: 'Email',
-                      prefixIcon: const Icon(Icons.email),
+                      prefixIcon: const Icon(Icons.email, color: Colors.redAccent),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10)),
                     ),
@@ -121,7 +114,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     obscureText: true,
                     decoration: InputDecoration(
                       labelText: 'Mật Khẩu',
-                      prefixIcon: const Icon(Icons.lock),
+                      prefixIcon: const Icon(Icons.lock, color: Colors.redAccent),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10)),
                     ),
@@ -129,13 +122,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: registerUser,
-                    child: Text('Đăng ký'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.redAccent, // Màu nền
+                      foregroundColor: Colors.white, // Màu chữ
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 16, horizontal: 32), // Kích thước
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12), // Bo góc
+                      ),
+                      elevation: 5, // Hiệu ứng bóng
+                      shadowColor: Colors.black45,
+                    ),
+                    child: const Text(
+                      'Đăng nhập',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.2,
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 10),
                   TextButton(
                     onPressed: () => Navigator.pop(context),
                     child: const Text("Đã có tài khoản? Đăng nhập ngay",
-                        style: TextStyle(color: Colors.teal)),
+                        style: TextStyle(color: Colors.redAccent)),
                   ),
                 ],
               ),

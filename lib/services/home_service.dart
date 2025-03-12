@@ -29,12 +29,11 @@ class HomeService {
   }
 
   String getImageUrl(RecordModel record) {
-  if (record.data.containsKey('image') && record.data['image'].isNotEmpty) {
-    return '${pb.baseUrl}/api/files/${record.collectionId}/${record.id}/${record.data['image']}';
+    if (record.data.containsKey('image') && record.data['image'].isNotEmpty) {
+      return '${pb.baseUrl}/api/files/${record.collectionId}/${record.id}/${record.data['image']}';
+    }
+    return ''; // Trả về rỗng nếu không có ảnh
   }
-  return ''; // Trả về rỗng nếu không có ảnh
-}
-
 
   Future<bool> createHomestay(Homestay homestay, {File? featuredImage}) async {
     try {
