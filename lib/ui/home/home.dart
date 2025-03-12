@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'home_manager.dart';
 import 'home_card.dart';
 import '../../models/homestay.dart';
+import '../../services/home_service.dart';
 import 'package:provider/provider.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   final List<Homestay> favoriteHomestays;
   final Function(Homestay, bool) onFavoriteToggle;
 
@@ -12,6 +13,21 @@ class Home extends StatelessWidget {
       {required this.favoriteHomestays,
       required this.onFavoriteToggle,
       super.key});
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  List<Homestay> _searchResults = [];
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -158,6 +174,19 @@ class Home extends StatelessWidget {
         ],
       ),
       child: TextField(
+        controller: _searchController,
+        onChanged: (value) async {
+          if (value.isNotEmpty) {
+            final results = await HomeService().searchHomestays(value);
+            setState(() {
+              _searchResults = results;
+            });
+          } else {
+            setState(() {
+              _searchResults = [];
+            });
+          }
+        },
         decoration: InputDecoration(
           hintText: "Tìm kiếm homestay...",
           hintStyle: TextStyle(color: Colors.grey[400]),
@@ -260,7 +289,9 @@ class Home extends StatelessWidget {
 
   Widget _buildHomestayGrid(BuildContext context) {
     final homeManager = Provider.of<HomeManager>(context);
-    final homestays = homeManager.homestays;
+    final homestays =
+        _searchResults.isNotEmpty ? _searchResults : homeManager.homestays;
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -295,8 +326,8 @@ class Home extends StatelessWidget {
           itemBuilder: (context, index) {
             return HomeCard(
               homestay: homestays[index],
-              favoriteHomestays: favoriteHomestays,
-              onFavoriteToggle: onFavoriteToggle,
+              favoriteHomestays: widget.favoriteHomestays,
+              onFavoriteToggle: widget.onFavoriteToggle,
             );
           },
         ),

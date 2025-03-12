@@ -96,4 +96,29 @@ class HomeService {
       return false;
     }
   }
+  
+  Future<List<Homestay>> searchHomestays(String query) async {
+    try {
+      final records = await pb.collection('homestays').getList(
+            filter:
+                "name ~ '$query' || location ~ '$query'", // Tìm theo tên hoặc vị trí
+          );
+      return records.items.map((record) {
+        return Homestay(
+          id: record.id,
+          name: record.data['name'],
+          description: record.data['description'],
+          location: record.data['location'],
+          imageUrl: getImageUrl(record),
+          price: record.data['price'].toDouble(),
+          rooms: record.data['rooms'],
+          guests: record.data['guests'],
+        );
+      }).toList();
+    } catch (e) {
+      print("Lỗi khi tìm kiếm homestay: $e");
+      return [];
+    }
+  }
+
 }
