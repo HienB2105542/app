@@ -22,12 +22,14 @@ class _HomeState extends State<Home> {
   List<Homestay> _searchResults = [];
   final TextEditingController _searchController = TextEditingController();
 
+  double _minPrice = 0;
+  double _maxPrice = 5000000;
+
   @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -191,13 +193,16 @@ class _HomeState extends State<Home> {
           hintText: "Tìm kiếm homestay...",
           hintStyle: TextStyle(color: Colors.grey[400]),
           prefixIcon: const Icon(Icons.search, color: Colors.redAccent),
-          suffixIcon: Container(
-            margin: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: Colors.redAccent,
-              borderRadius: BorderRadius.circular(8),
+          suffixIcon: InkWell(
+            onTap: _showFilterDialog, // Nhấn vào sẽ mở bộ lọc giá
+            child: Container(
+              margin: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: Colors.redAccent,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Icon(Icons.tune, color: Colors.white),
             ),
-            child: const Icon(Icons.tune, color: Colors.white, size: 20),
           ),
           filled: true,
           fillColor: Colors.white,
@@ -205,14 +210,6 @@ class _HomeState extends State<Home> {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
             borderSide: BorderSide.none,
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
-            borderSide: BorderSide.none,
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
-            borderSide: const BorderSide(color: Colors.redAccent, width: 1),
           ),
         ),
       ),
@@ -334,4 +331,72 @@ class _HomeState extends State<Home> {
       ],
     );
   }
+
+  void _showFilterDialog() {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Lọc theo giá",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  Text("Từ ${_minPrice.toInt()} - ${_maxPrice.toInt()} VNĐ"),
+                  RangeSlider(
+                    values: RangeValues(_minPrice, _maxPrice),
+                    min: 0,
+                    max: 10000000,
+                    divisions: 20,
+                    labels: RangeLabels(
+                      "${_minPrice.toInt()} VNĐ",
+                      "${_maxPrice.toInt()} VNĐ",
+                    ),
+                    onChanged: (values) {
+                      setState(() {
+                        _minPrice = values.start;
+                        _maxPrice = values.end;
+                      });
+                    },
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context); // Đóng bộ lọc
+                        _applyFilter();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.redAccent,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 12),
+                      ),
+                      child: const Text("Áp dụng",
+                          style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+void _applyFilter() {
+    setState(() {
+    });
+  }
+
+
 }
