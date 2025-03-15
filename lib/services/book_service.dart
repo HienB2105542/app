@@ -1,4 +1,5 @@
 import 'package:pocketbase/pocketbase.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../models/booking.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -29,29 +30,30 @@ class BookService {
     }
   }
 
+  
+  Future<String?> getUserId() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? userId = prefs.getString('userId');
+    print("User ID từ SharedPreferences: $userId");
+    return userId;
+  }
+
   // Tạo booking mới
 Future<bool> createBooking(Booking booking) async {
     try {
-      final Map<String, dynamic> bookingData = booking.toJson();
-
-      // In dữ liệu gửi đi để kiểm tra
-      print("Dữ liệu gửi đi: ${jsonEncode(bookingData)}");
-
       final response = await http.post(
         Uri.parse('$_baseUrl/api/collections/$_bookingsCollection/records'),
         headers: {
           "Content-Type": "application/json",
-          'Authorization': 'Bearer YOUR_ACCESS_TOKEN', // Nếu API yêu cầu
         },
-        body: jsonEncode(bookingData),
+        body: jsonEncode(booking.toJson()),
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         print("Đặt phòng thành công!");
         return true;
       } else {
-        print("Lỗi khi gửi API: ${response.body}");
-        print("Mã lỗi: ${response.statusCode}");
+        print("Lỗi khi gửi API: ${response.body}"); // In lỗi từ API
         return false;
       }
     } catch (error) {
@@ -59,7 +61,6 @@ Future<bool> createBooking(Booking booking) async {
       return false;
     }
   }
-
 
   // Cập nhật trạng thái booking
   Future<bool> updateBookingStatus(String bookingId, String status) async {

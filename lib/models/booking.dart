@@ -66,7 +66,7 @@ class Booking {
       "rating": rating,
       "nights": nights,
       "totalPrice": totalPrice,
-      "useId": userId, // Sửa "useId" thành "userId"
+      "userId": userId, 
     };
   }
   // Chuyển đổi từ JSON sang Booking
@@ -82,7 +82,7 @@ class Booking {
       rating: (json['rating'] as num).toDouble(),
       nights: json['nights'],
       totalPrice: (json['totalPrice'] as num).toDouble(),
-      userId: json['useId'],
+      userId: json['userId'],
     );
   }
 }

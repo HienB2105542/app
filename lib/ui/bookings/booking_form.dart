@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../../models/homestay.dart';
 import '../../models/booking.dart';
 import 'booking_manager.dart';
+import '../../services/book_service.dart';
 
 class BookingFormScreen extends StatefulWidget {
   final Homestay homestay;
@@ -74,7 +75,7 @@ class _BookingFormScreenState extends State<BookingFormScreen> {
     }
   }
 
-  void _submitBooking() async {
+void _submitBooking() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
@@ -82,49 +83,58 @@ class _BookingFormScreenState extends State<BookingFormScreen> {
         _isLoading = true;
       });
 
-      // Tạo booking mới
+      // Lấy userId từ BookService
+      final userId = await BookService().getUserId();
+      if (userId == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Lỗi: Không lấy được thông tin người dùng'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        setState(() {
+          _isLoading = false;
+        });
+        return; // Dừng lại ở đây, tránh truy cập widget khi userId bị null
+      }
+
+      // Gán widget.homestay vào một biến trước khi gọi trong hàm async
+      final homestay = widget.homestay;
+
       final booking = Booking(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
-        homestayId: widget.homestay.id ?? '',
-        homestayName: widget.homestay.name,
-        location: widget.homestay.location,
+        homestayId: homestay.id ?? '',
+        homestayName: homestay.name,
+        location: homestay.location,
         checkInDate: _checkInDate,
         checkOutDate: _checkOutDate,
-        status: 'pending', // Trạng thái mặc định là pending
+        status: 'pending',
         nights: _nights,
         totalPrice: _totalPrice,
-        userId: 'userId', // Thay thế bằng userId của người dùng thực
+        userId: userId, // Gán userId thực
       );
+
       // Thêm booking vào manager
       final bookingManager =
           Provider.of<BookingManager>(context, listen: false);
       final success = await bookingManager.addBooking(booking);
+      if (success) {
+        await bookingManager.fetchBookings(userId); // Cập nhật danh sách
+        Navigator.pushReplacementNamed(context, '/bookings'); // Chuyển hướng
+      }
 
       setState(() {
         _isLoading = false;
       });
 
-      if (success) {
-        // Hiển thị thông báo thành công
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Đặt phòng thành công! Chờ duyệt'),
-            backgroundColor: Colors.orange,
-          ),
-        );
-
-
-        // Chuyển đến màn hình danh sách booking
-        Navigator.pushReplacementNamed(context, '/bookings');
-      } else {
-        // Hiển thị thông báo lỗi
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Có lỗi xảy ra khi đặt phòng. Vui lòng thử lại sau.'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(success
+              ? 'Đặt phòng thành công! Chờ duyệt'
+              : 'Có lỗi xảy ra khi đặt phòng. Vui lòng thử lại sau.'),
+          backgroundColor: success ? Colors.orange : Colors.red,
+        ),
+      );
     }
   }
 

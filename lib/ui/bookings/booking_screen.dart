@@ -25,7 +25,6 @@ class _BookingScreenState extends State<BookingScreen> {
   }
 
   Future<void> _fetchBookings() async {
-    // Giả sử bạn có userId lưu trữ ở đâu đó, hoặc tạm thời hardcode
     final userId = 'userId'; // Thay thế bằng userId thực
     await Provider.of<BookingManager>(context, listen: false)
         .fetchBookings(userId);

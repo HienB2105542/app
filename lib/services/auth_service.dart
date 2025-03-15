@@ -18,6 +18,11 @@ class AuthService {
     return null;
   }
 
+    Future<String?> getAuthToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('authToken');
+  }
+
   // Đăng nhập
   Future<bool> login(String email, String password) async {
     try {
@@ -27,7 +32,7 @@ class AuthService {
         body: jsonEncode({'identity': email, 'password': password}),
       );
 
-      print("📡 API response: ${response.body}"); //Xem dữ liệu trả về từ API
+      print("API response: ${response.body}"); 
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
@@ -62,17 +67,19 @@ class AuthService {
       return false;
     }
   }
+  
 
   // Lưu thông tin đăng nhập
-  Future<void> saveUserData(Map<String, dynamic> data) async {
+   Future<void> saveUserData(Map<String, dynamic> data) async {
     final prefs = await SharedPreferences.getInstance();
-    print("Dữ liệu trước khi lưu: ${jsonEncode(data)}");
-    if (data.containsKey('record')) {
-      await prefs.setString('user', jsonEncode(data['record']));
-      await prefs.setString('token', data['token']);
-      print("Lưu thành công: ${jsonEncode(data['record'])}");
+
+    if (data.containsKey('record') && data.containsKey('token')) {
+      await prefs.setString('userId', data['record']['id']);
+      await prefs.setString('authToken', data['token']);
+      print("User ID đã lưu: ${data['record']['id']}");
+      print("Token đã lưu: ${data['token']}");
     } else {
-      print("Lưu thất bại: Dữ liệu không đúng");
+      print("Dữ liệu đăng nhập không hợp lệ!");
     }
   }
 
