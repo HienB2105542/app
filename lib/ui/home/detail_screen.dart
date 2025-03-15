@@ -22,12 +22,30 @@ class DetailScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Image.asset(
-                    homestay.imageUrl,
-                    width: double.infinity,
-                    height: 250,
-                    fit: BoxFit.cover,
-                  ),
+                  homestay.imageUrl.isNotEmpty
+                      ? Image.network(
+                          homestay.imageUrl, // Đường dẫn hình ảnh từ PocketBase
+                          width: double.infinity,
+                          height: 250,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                              Container(
+                            height: 250,
+                            color: Colors.grey[300],
+                            child: const Center(
+                              child: Icon(Icons.image_not_supported,
+                                  size: 50, color: Colors.grey),
+                            ),
+                          ),
+                        )
+                      : Container(
+                          height: 250,
+                          color: Colors.grey[300],
+                          child: const Center(
+                            child: Icon(Icons.image_not_supported,
+                                size: 50, color: Colors.grey),
+                          ),
+                        ),
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
@@ -53,13 +71,13 @@ class DetailScreen extends StatelessWidget {
                           children: [
                             const Icon(Icons.group, color: Colors.redAccent),
                             const SizedBox(width: 5),
-                            Text(homestay.guests.toString(),
+                            Text("${homestay.guests} khách",
                                 style: const TextStyle(fontSize: 16)),
                           ],
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          "Giá: ${homestay.price}",
+                          "Giá: ${homestay.price} VNĐ",
                           style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -72,9 +90,11 @@ class DetailScreen extends StatelessWidget {
                               fontSize: 18, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 5),
-                        const Text(
-                          "Homestay sang trọng với đầy đủ tiện nghi, phù hợp cho kỳ nghỉ thư giãn.",
-                          style: TextStyle(fontSize: 16),
+                        Text(
+                          homestay.description.isNotEmpty
+                              ? homestay.description
+                              : "Chưa có mô tả.",
+                          style: const TextStyle(fontSize: 16),
                         ),
                       ],
                     ),
@@ -92,7 +112,8 @@ class DetailScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => BookingFormScreen(homestay: homestay,),
+                      builder: (context) =>
+                          BookingFormScreen(homestay: homestay),
                     ),
                   );
                 },
@@ -101,8 +122,7 @@ class DetailScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 15),
                 ),
                 child: const Text("Đặt phòng ngay",
-                    style: TextStyle(fontSize: 18, color: Colors.white),
-                    ),
+                    style: TextStyle(fontSize: 18, color: Colors.white)),
               ),
             ),
           ),

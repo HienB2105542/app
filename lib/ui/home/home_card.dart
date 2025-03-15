@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import '../home/detail_screen.dart';
@@ -69,33 +68,15 @@ class _HomeCardState extends State<HomeCard> {
                         ? Image.network(
                             widget.homestay.imageUrl,
                             width: double.infinity,
+                            height: 150,
                             fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Container(
-                                color: Colors.grey[300],
-                                child: const Icon(
-                                  Icons.image_not_supported,
-                                  size: 50,
-                                  color: Colors.grey,
-                                ),
-                              );
-                            },
+                            
                           )
-                        : Image.file(
-                            File(widget.homestay
-                                .imageUrl), // Lấy ảnh từ thư viện máy ảo
+                        : Image.asset(
+                            'assets/images/dalat.jpg', // Nếu không có ảnh
                             width: double.infinity,
+                            height: 150,
                             fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Container(
-                                color: Colors.grey[300],
-                                child: const Icon(
-                                  Icons.image_not_supported,
-                                  size: 50,
-                                  color: Colors.grey,
-                                ),
-                              );
-                            },
                           ),
 
                   ),

@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'dart:convert';
 import 'package:homestay/services/auth_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:pocketbase/pocketbase.dart';
@@ -7,6 +7,25 @@ import '../models/homestay.dart';
 
 class HomeService {
   final PocketBase pb = PocketBase('http://10.0.2.2:8090');
+
+Future<List<Homestay>> fetchHomestays() async {
+    final response = await http.get(
+        Uri.parse("http://10.0.2.2:8090/api/collections/homestays/records"));
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      print("Dữ liệu từ API: $data"); // Debug API trả về
+
+      return (data['items'] as List).map((json) {
+        final homestay = Homestay.fromJson(json);
+        print("Homestay có ảnh: ${homestay.imageUrl}");
+        return homestay;
+      }).toList();
+    } else {
+      throw Exception("Lỗi lấy dữ liệu");
+    }
+  }
+
 
   Future<List<Homestay>> getHomestays() async {
     try {

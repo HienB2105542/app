@@ -71,17 +71,20 @@ class Homestay {
   }
 
   // Chuyển đổi từ JSON sang Homestay
-  factory Homestay.fromJson(Map<String, dynamic> json) {
+factory Homestay.fromJson(Map<String, dynamic> json) {
+    String baseUrl = "http://10.0.2.2:8090/api/files/";
+
     return Homestay(
       id: json['id'],
       name: json['name'],
-      description: json['description'],
       location: json['location'],
       guests: json['guests'] ?? 0,
       rooms: json['rooms'] ?? 0,
-      price: (json['price'] as num).toDouble(), // Chuyển đổi thành double
-      imageUrl: json['imageUrl'] ?? '',
-      isFavorite: json['isFavorite'] ?? false,
+      price: (json['price'] as num).toDouble(),
+      imageUrl: json['image'] != null && json['image'].isNotEmpty
+          ? "$baseUrl${json['collectionId']}/${json['id']}/${json['image']}"
+          : '',
+      isFavorite: json['isFavorite'] ?? false, description: '',
     );
   }
 }
