@@ -41,12 +41,15 @@ class BookService {
   // Tạo booking mới
 Future<bool> createBooking(Booking booking) async {
     try {
+      final bookingJson = booking.toJson();
+      print("Full Booking JSON: $bookingJson");
+
       final response = await http.post(
-        Uri.parse('$_baseUrl/api/collections/$_bookingsCollection/records'),
+        Uri.parse('$_baseUrl/api/collections/booking/records'),
         headers: {
           "Content-Type": "application/json",
         },
-        body: jsonEncode(booking.toJson()),
+        body: jsonEncode(bookingJson),
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {

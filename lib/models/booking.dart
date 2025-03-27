@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 class Booking {
   final String id;
   final String homestayId;
@@ -54,19 +55,21 @@ class Booking {
 
   // Chuyển đổi từ Booking sang JSON
   Map<String, dynamic> toJson() {
+    final dateFormat = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+
     return {
-      "id": id,
+      "id": id.toString(),
       "homestayId": homestayId,
       "homestayName": homestayName,
       "location": location,
       "checkInDate":
-          checkInDate.toUtc().toIso8601String(), // Chuyển về dạng ISO 8601
-      "checkOutDate": checkOutDate.toUtc().toIso8601String(),
+          dateFormat.format(checkInDate.toUtc()), // Chuyển đổi DateTime sang String
+      "checkOutDate": dateFormat.format(checkOutDate.toUtc()),
       "status": status,
       "rating": rating,
       "nights": nights,
       "totalPrice": totalPrice,
-      "userId": userId, 
+      "userId": userId.toString(), 
     };
   }
   // Chuyển đổi từ JSON sang Booking

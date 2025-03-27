@@ -256,7 +256,6 @@ class BookingItemCard extends StatelessWidget {
 
   Widget _buildAdminActions(BuildContext context) {
     final bookingManager = Provider.of<BookingManager>(context, listen: false);
-
     if (booking.status.toLowerCase() == 'pending') {
       return Row(
         children: [
