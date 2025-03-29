@@ -60,10 +60,10 @@ class _HomeState extends State<Home> {
 
   Widget _buildHeroSection(BuildContext context) {
     return Container(
-      height: 220, // Tăng chiều cao để tránh tràn nội dung
+      height: 220, 
       width: double.infinity,
       decoration: const BoxDecoration(
-        color: Colors.redAccent, // Đặt màu nền trước khi ảnh tải
+        color: Colors.redAccent, 
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(30),
           bottomRight: Radius.circular(30),
@@ -78,7 +78,7 @@ class _HomeState extends State<Home> {
                 bottomRight: Radius.circular(30),
               ),
               child: Image.asset(
-                'assets/images/dalat.jpg',
+                'assets/images/homestay_bg.jpg',
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) {
                   return Container(color: Colors.redAccent);
@@ -104,7 +104,7 @@ class _HomeState extends State<Home> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min, // Tránh tràn nội dung
+              mainAxisSize: MainAxisSize.min, 
               children: [
                 const Text(
                   "Khám phá",
@@ -122,7 +122,7 @@ class _HomeState extends State<Home> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 8), // Giảm khoảng cách để tránh tràn
+                const SizedBox(height: 8), 
                 const Text(
                   "Tìm kiếm và đặt phòng ngay hôm nay",
                   style: TextStyle(
@@ -132,7 +132,7 @@ class _HomeState extends State<Home> {
                 ),
                 const SizedBox(height: 16),
                 SizedBox(
-                  width: 170, // Giới hạn chiều rộng của nút để tránh bị tràn
+                  width: 170, 
                   child: ElevatedButton(
                     onPressed: () {
                       print("Chuyển đến danh sách homestay");
@@ -194,7 +194,7 @@ class _HomeState extends State<Home> {
           hintStyle: TextStyle(color: Colors.grey[400]),
           prefixIcon: const Icon(Icons.search, color: Colors.redAccent),
           suffixIcon: InkWell(
-            onTap: _showFilterDialog, // Nhấn vào sẽ mở bộ lọc giá
+            onTap: _showFilterDialog,
             child: Container(
               margin: const EdgeInsets.all(6),
               decoration: BoxDecoration(
@@ -373,7 +373,7 @@ class _HomeState extends State<Home> {
                     alignment: Alignment.centerRight,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.pop(context); // Đóng bộ lọc
+                        Navigator.pop(context); 
                         _applyFilter();
                       },
                       style: ElevatedButton.styleFrom(

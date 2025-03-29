@@ -14,7 +14,7 @@ Future<List<Homestay>> fetchHomestays() async {
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      print("Dữ liệu từ API: $data"); // Debug API trả về
+      print("Dữ liệu từ API: $data"); 
 
       return (data['items'] as List).map((json) {
         final homestay = Homestay.fromJson(json);
@@ -51,13 +51,13 @@ Future<List<Homestay>> fetchHomestays() async {
     if (record.data.containsKey('image') && record.data['image'].isNotEmpty) {
       return '${pb.baseUrl}/api/files/${record.collectionId}/${record.id}/${record.data['image']}';
     }
-    return ''; // Trả về rỗng nếu không có ảnh
+    return ''; 
   }
 
   Future<bool> createHomestay(Homestay homestay, {File? featuredImage}) async {
     try {
       final authService = AuthService();
-      final userId = await authService.getUserId(); // Lấy userId hiện tại
+      final userId = await authService.getUserId(); 
       print("User ID lấy được: $userId");
 
       if (userId == null) {
@@ -65,7 +65,6 @@ Future<List<Homestay>> fetchHomestays() async {
         return false;
       }
 
-      // Tạo form dữ liệu
       final formData = <String, dynamic>{
         'name': homestay.name,
         'description': homestay.description,
@@ -74,7 +73,7 @@ Future<List<Homestay>> fetchHomestays() async {
         'rooms': homestay.rooms,
         'price': homestay.price,
         'isFavorite': homestay.isFavorite,
-        'userId': userId, // Lưu ID người dùng vào bài đăng
+        'userId': userId, 
       };
 
       print("Dữ liệu gửi lên API: $formData");
@@ -84,27 +83,23 @@ Future<List<Homestay>> fetchHomestays() async {
         Uri.parse('${pb.baseUrl}/api/collections/homestays/records'),
       );
 
-      // Thêm các trường dữ liệu vào request
       formData.forEach((key, value) {
         request.fields[key] = value.toString();
       });
 
-      // Nếu có ảnh, thêm ảnh vào request
       if (featuredImage != null) {
         request.files.add(
           await http.MultipartFile.fromPath(
-            'image', // Tên cột ảnh trên PocketBase
+            'image', 
             featuredImage.path,
           ),
         );
       }
 
-      // Thêm header xác thực nếu cần
       if (pb.authStore.isValid) {
         request.headers['Authorization'] = 'Bearer ${pb.authStore.token}';
       }
 
-      // Gửi request
       final response = await request.send();
       final responseBody = await response.stream.bytesToString();
       print("Phản hồi từ PocketBase: $responseBody");
@@ -120,7 +115,7 @@ Future<List<Homestay>> fetchHomestays() async {
     try {
       final records = await pb.collection('homestays').getList(
             filter:
-                "name ~ '$query' || location ~ '$query'", // Tìm theo tên hoặc vị trí
+                "name ~ '$query' || location ~ '$query'", 
           );
       return records.items.map((record) {
         return Homestay(

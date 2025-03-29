@@ -28,7 +28,6 @@ class HomeManager with ChangeNotifier {
     try {
       List<Homestay>? fetchedHomestays = await _homeService.getHomestays();
 
-      // Kiểm tra nếu fetchedHomestays là null thì gán danh sách rỗng
       _homestays = fetchedHomestays;
 
       for (var homestay in _homestays) {

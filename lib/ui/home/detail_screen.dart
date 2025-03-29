@@ -24,27 +24,23 @@ class DetailScreen extends StatelessWidget {
                 children: [
                   homestay.imageUrl.isNotEmpty
                       ? Image.network(
-                          homestay.imageUrl, // Đường dẫn hình ảnh từ PocketBase
+                          homestay.imageUrl,
                           width: double.infinity,
                           height: 250,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) =>
-                              Container(
+                              Image.asset(
+                            'assets/images/dalat.jpg',
+                            width: double.infinity,
                             height: 250,
-                            color: Colors.grey[300],
-                            child: const Center(
-                              child: Icon(Icons.image_not_supported,
-                                  size: 50, color: Colors.grey),
-                            ),
+                            fit: BoxFit.cover,
                           ),
                         )
-                      : Container(
+                      : Image.asset(
+                          'assets/images/dalat.jpg',
+                          width: double.infinity,
                           height: 250,
-                          color: Colors.grey[300],
-                          child: const Center(
-                            child: Icon(Icons.image_not_supported,
-                                size: 50, color: Colors.grey),
-                          ),
+                          fit: BoxFit.cover,
                         ),
                   Padding(
                     padding: const EdgeInsets.all(16.0),

@@ -6,11 +6,10 @@ class AuthService {
   final String pocketBaseUrl =
       'http://127.0.0.1:8090/api/collections/users/auth-with-password';
 
-  //lấy thông tin tài khoản
   Future<String?> getUserId() async {
     final prefs = await SharedPreferences.getInstance();
     final userData = prefs.getString('user');
-    print("Lấy dữ liệu user từ Share: $userData"); //Db
+    print("Lấy dữ liệu user từ Share: $userData"); 
     if (userData != null) {
       final decodedData = jsonDecode(userData);
       return decodedData['id'];
@@ -23,7 +22,6 @@ class AuthService {
     return prefs.getString('authToken');
   }
 
-  // Đăng nhập
   Future<bool> login(String email, String password) async {
     try {
       final response = await http.post(
@@ -52,7 +50,6 @@ class AuthService {
     }
   }
 
-  // Đăng ký
   Future<bool> register(String email, String password, String name) async {
     try {
       final response = await http.post(
@@ -69,7 +66,6 @@ class AuthService {
   }
   
 
-  // Lưu thông tin đăng nhập
    Future<void> saveUserData(Map<String, dynamic> data) async {
     final prefs = await SharedPreferences.getInstance();
 
@@ -83,24 +79,21 @@ class AuthService {
     }
   }
 
-  // Lấy thông tin người dùng hiện tại
   Future<Map<String, dynamic>?> getCurrentUser() async {
     final prefs = await SharedPreferences.getInstance();
     final userData = prefs.getString('user');
-    print("Stored user data: $userData"); // Debug xem có dữ liệu không
+    print("Stored user data: $userData"); 
     if (userData != null) {
       return jsonDecode(userData);
     }
     return null;
   }
 
-  // Đăng xuất
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
   }
 
-  // Kiểm tra đăng nhập
   Future<bool> isLoggedIn() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.containsKey('token');

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 class Homestay {
   final String? id;
   final String name;
@@ -25,7 +24,7 @@ class Homestay {
     this.isFavorite = false,
   });
 
- Homestay copyWith({
+  Homestay copyWith({
     String? id,
     String? name,
     String? description,
@@ -55,7 +54,15 @@ class Homestay {
     return featuredImage != null || imageUrl.isNotEmpty;
   }
 
-  // Chuyển đổi Homestay thành JSON
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is Homestay && other.id == id;
+  }
+
+  @override
+  int get hashCode => id.hashCode;
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -70,8 +77,7 @@ class Homestay {
     };
   }
 
-  // Chuyển đổi từ JSON sang Homestay
-factory Homestay.fromJson(Map<String, dynamic> json) {
+  factory Homestay.fromJson(Map<String, dynamic> json) {
     String baseUrl = "http://10.0.2.2:8090/api/files/";
 
     return Homestay(
@@ -84,7 +90,8 @@ factory Homestay.fromJson(Map<String, dynamic> json) {
       imageUrl: json['image'] != null && json['image'].isNotEmpty
           ? "$baseUrl${json['collectionId']}/${json['id']}/${json['image']}"
           : '',
-      isFavorite: json['isFavorite'] ?? false, description: '',
+      isFavorite: json['isFavorite'] ?? false,
+      description: json['description'] ?? '',
     );
   }
 }

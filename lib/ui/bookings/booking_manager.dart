@@ -12,7 +12,6 @@ class BookingManager with ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get error => _error;
 
-  // Lấy tất cả bookings của người dùng
   Future<void> fetchBookings(String userId) async {
     _setLoading(true);
     try {
@@ -25,7 +24,6 @@ class BookingManager with ChangeNotifier {
     _setLoading(false);
   }
 
-  // Thêm booking mới
 Future<bool> addBooking(Booking booking) async {
   _setLoading(true);
   try {
@@ -48,23 +46,18 @@ Future<bool> addBooking(Booking booking) async {
   }
 }
 
-
-  // Xác nhận booking (cho admin)
   Future<bool> confirmBooking(String bookingId) async {
     return await _updateBookingStatus(bookingId, 'confirmed');
   }
 
-  // Hoàn thành booking
   Future<bool> completeBooking(String bookingId) async {
     return await _updateBookingStatus(bookingId, 'completed');
   }
 
-  // Hủy booking
   Future<bool> cancelBooking(String bookingId) async {
     return await _updateBookingStatus(bookingId, 'cancelled');
   }
 
-  // Xóa booking
   Future<bool> deleteBooking(String bookingId) async {
     _setLoading(true);
     try {
@@ -84,7 +77,6 @@ Future<bool> addBooking(Booking booking) async {
     }
   }
 
-  // Cập nhật trạng thái booking
   Future<bool> _updateBookingStatus(String bookingId, String status) async {
     _setLoading(true);
     try {

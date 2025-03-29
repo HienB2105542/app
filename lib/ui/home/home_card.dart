@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import '../home/detail_screen.dart';
 import '../../models/homestay.dart';
@@ -73,7 +72,7 @@ class _HomeCardState extends State<HomeCard> {
                             
                           )
                         : Image.asset(
-                            'assets/images/dalat.jpg', // Nếu không có ảnh
+                            'assets/images/dalat.jpg', 
                             width: double.infinity,
                             height: 150,
                             fit: BoxFit.cover,

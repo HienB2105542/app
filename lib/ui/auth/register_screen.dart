@@ -123,14 +123,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ElevatedButton(
                     onPressed: registerUser,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.redAccent, // Màu nền
-                      foregroundColor: Colors.white, // Màu chữ
+                      backgroundColor: Colors.redAccent, 
+                      foregroundColor: Colors.white, 
                       padding: const EdgeInsets.symmetric(
-                          vertical: 16, horizontal: 32), // Kích thước
+                          vertical: 16, horizontal: 32),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12), // Bo góc
+                        borderRadius: BorderRadius.circular(12), 
                       ),
-                      elevation: 5, // Hiệu ứng bóng
+                      elevation: 5, 
                       shadowColor: Colors.black45,
                     ),
                     child: const Text(

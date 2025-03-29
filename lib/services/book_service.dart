@@ -11,7 +11,6 @@ class BookService {
 
   BookService() : _pb = PocketBase(_baseUrl);
 
-  // Lấy tất cả bookings của người dùng
   Future<List<Booking>> getBookings(String userId) async {
     try {
       final records = await _pb.collection(_bookingsCollection).getList(
@@ -21,7 +20,7 @@ class BookService {
 
       return records.items.map((record) {
         final data = record.data;
-        data['id'] = record.id; // Thêm ID từ PocketBase
+        data['id'] = record.id; 
         return Booking.fromJson(data);
       }).toList();
     } catch (e) {
@@ -38,7 +37,6 @@ class BookService {
     return userId;
   }
 
-  // Tạo booking mới
 Future<bool> createBooking(Booking booking) async {
     try {
       final bookingJson = booking.toJson();
@@ -56,7 +54,7 @@ Future<bool> createBooking(Booking booking) async {
         print("Đặt phòng thành công!");
         return true;
       } else {
-        print("Lỗi khi gửi API: ${response.body}"); // In lỗi từ API
+        print("Lỗi khi gửi API: ${response.body}");
         return false;
       }
     } catch (error) {
@@ -65,7 +63,6 @@ Future<bool> createBooking(Booking booking) async {
     }
   }
 
-  // Cập nhật trạng thái booking
   Future<bool> updateBookingStatus(String bookingId, String status) async {
     try {
       await _pb.collection(_bookingsCollection).update(
@@ -79,7 +76,6 @@ Future<bool> createBooking(Booking booking) async {
     }
   }
 
-  // Xóa booking
   Future<bool> deleteBooking(String bookingId) async {
     try {
       await _pb.collection(_bookingsCollection).delete(bookingId);

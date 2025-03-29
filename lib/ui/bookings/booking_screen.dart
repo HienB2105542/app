@@ -25,7 +25,7 @@ class _BookingScreenState extends State<BookingScreen> {
   }
 
   Future<void> _fetchBookings() async {
-    final userId = 'userId'; // Thay thế bằng userId thực
+    final userId = 'userId'; 
     await Provider.of<BookingManager>(context, listen: false)
         .fetchBookings(userId);
   }
@@ -80,7 +80,6 @@ class _BookingScreenState extends State<BookingScreen> {
                 ),
               ),
             ),
-            // Bookings list
             Expanded(
               child: bookingManager.isLoading
                   ? const Center(child: CircularProgressIndicator())

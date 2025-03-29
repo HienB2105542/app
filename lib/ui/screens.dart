@@ -17,7 +17,7 @@ class AppScreens {
   static const String homestaylist = '/homestay_list';
   static const String favorites = '/favorites';
 
-  static List<Homestay> favoriteHomestays = []; // Danh sách homestay yêu thích
+  static List<Homestay> favoriteHomestays = [];
 
   static void onFavoriteToggle(Homestay homestay, bool isFavorite) {
     if (isFavorite) {

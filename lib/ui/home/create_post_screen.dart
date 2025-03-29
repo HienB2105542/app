@@ -244,43 +244,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     );
   }
 
-  // void _submitHomestay() {
-  //   if (_formKey.currentState!.validate()) {
-  //     final newHomestay = Homestay(
-  //       id: DateTime.now().toString(),
-  //       name: _nameController.text,
-  //       description: "Mô tả homestay",
-  //       location: _locationController.text,
-  //       guests: int.tryParse(_guestsController.text) ?? 0,
-  //       imageUrl: _selectedImage,
-  //       price: double.tryParse(
-  //               _priceController.text.replaceAll(RegExp(r'[^0-9]'), '')) ??
-  //           0,
-  //       rooms: 1,
-  //     );
-
-  //     // Thêm vào danh sách homestays
-  //     HomeManager().homestays.add(newHomestay);
-
-  //     // Hiển thị thông báo
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       const SnackBar(
-  //         content: Text("Đăng tin thành công!"),
-  //         backgroundColor: Colors.green,
-  //       ),
-  //     );
-
-  //     // Quay lại màn hình trước
-  //     Navigator.pop(context);
-  //   }
-  // }
   void _submitHomestay() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
       });
 
-      // Tạo homestay mới
       final newHomestay = Homestay(
         name: _nameController.text,
         description: _descriptionController.text,
@@ -294,7 +263,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       );
 
       try {
-        // Lưu homestay vào PocketBase
         final success = await _homeService.createHomestay(newHomestay,
             featuredImage: _selectedFile);
 
@@ -303,7 +271,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         });
 
         if (success) {
-          // Hiển thị thông báo
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text("Đăng tin thành công!"),
@@ -311,10 +278,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             ),
           );
 
-          // Quay lại màn hình trước
           Navigator.pop(context);
         } else {
-          // Hiển thị thông báo lỗi
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text("Đăng tin thất bại. Vui lòng thử lại!"),
@@ -327,7 +292,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
           _isLoading = false;
         });
 
-        // Hiển thị thông báo lỗi
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text("Lỗi: $e"),

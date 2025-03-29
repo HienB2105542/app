@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/homestay.dart';
 
+
 class FavoritesScreen extends StatelessWidget {
   final List<Homestay> favoriteHomestays;
   final Function(Homestay, bool) onFavoriteToggle;
@@ -224,7 +225,6 @@ class FavoritesScreen extends StatelessWidget {
         Expanded(
           child: OutlinedButton(
             onPressed: () {
-              // Đặt phòng
             },
             style: OutlinedButton.styleFrom(
               foregroundColor: Colors.redAccent,
