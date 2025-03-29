@@ -37,7 +37,7 @@
 //                         const Icon(Icons.house, color: Colors.redAccent),
 //                         const SizedBox(width: 8),
 //                         Text(
-//                           booking.homestay,
+//                           booking.homestayId,
 //                           style: const TextStyle(
 //                             fontSize: 20,
 //                             fontWeight: FontWeight.bold,
@@ -46,24 +46,24 @@
 //                       ],
 //                     ),
 //                     const Divider(height: 24),
-//                     _buildInfoRow(Icons.person, 'Khách hàng', booking.userName),
+//                     _buildInfoRow(Icons.person, 'Khách hàng', booking.homestayName),
 //                     const SizedBox(height: 12),
 //                     _buildInfoRow(
 //                       Icons.calendar_today,
 //                       'Ngày nhận phòng',
-//                       '${booking.checkIn.day}/${booking.checkIn.month}/${booking.checkIn.year}',
+//                       '${booking.checkInDate.day}/${booking.checkInDate.month}/${booking.checkInDate.year}',
 //                     ),
 //                     const SizedBox(height: 12),
 //                     _buildInfoRow(
 //                       Icons.calendar_today,
 //                       'Ngày trả phòng',
-//                       '${booking.checkOut.day}/${booking.checkOut.month}/${booking.checkOut.year}',
+//                       '${booking.checkOutDate.day}/${booking.checkOutDate.month}/${booking.checkOutDate.year}',
 //                     ),
 //                     const SizedBox(height: 12),
 //                     _buildInfoRow(
 //                       Icons.timelapse,
 //                       'Số đêm',
-//                       '${booking.checkOut.difference(booking.checkIn).inDays} đêm',
+//                       '${booking.checkOutDate.difference(booking.checkInDate).inDays} đêm',
 //                     ),
 //                     const Divider(height: 24),
 //                     Row(
@@ -207,16 +207,13 @@
 //           ),
 //           TextButton(
 //             onPressed: () {
-//               // Cancel the booking
 //               final bookingManager =
 //                   Provider.of<BookingManager>(context, listen: false);
-//               bookingManager.removeBooking(booking.id);
+//               bookingManager.deleteBooking(booking.id);
 
-//               // Navigate back to bookings screen
 //               Navigator.of(ctx).pop();
 //               Navigator.of(context).pop();
 
-//               // Show success message
 //               ScaffoldMessenger.of(context).showSnackBar(
 //                 const SnackBar(
 //                   content: Text('Đã hủy đặt phòng thành công!'),

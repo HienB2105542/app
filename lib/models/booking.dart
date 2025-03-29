@@ -1,21 +1,23 @@
 import 'package:intl/intl.dart';
 class Booking {
-  final String id;
+  final String? id;
   final String homestayId;
   final String homestayName;
+  final String phone;
   final String location;
   final DateTime checkInDate;
   final DateTime checkOutDate;
-  final String status; //Trạng thái
-  final double rating; //đánh giá
-  final int nights; //khách ở bao nhiêu đêm
-  final double totalPrice; //Tổng số tiền khách phải trả
+  final String status;
+  final double rating; 
+  final int nights;
+  final double totalPrice; 
   final String userId;
 
   Booking({
-    required this.id,
+     this.id,
     required this.homestayId,
     required this.homestayName,
+    required this.phone,
     required this.location,
     required this.checkInDate,
     required this.checkOutDate,
@@ -30,6 +32,7 @@ class Booking {
       {String? id,
       String? homestayId,
       String? homestayName,
+      String? phone,
       String? location,
       DateTime? checkInDate,
       DateTime? checkOutDate,
@@ -42,6 +45,7 @@ class Booking {
       id: id ?? this.id,
       homestayId: homestayId ?? this.homestayId,
       homestayName: homestayName ?? this.homestayName,
+      phone: phone ?? this.phone,
       location: location ?? this.location,
       checkInDate: checkInDate ?? this.checkInDate,
       checkOutDate: checkOutDate ?? this.checkOutDate,
@@ -53,7 +57,6 @@ class Booking {
     );
   }
 
-  // Chuyển đổi từ Booking sang JSON
   Map<String, dynamic> toJson() {
     final dateFormat = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
 
@@ -61,9 +64,10 @@ class Booking {
       "id": id.toString(),
       "homestayId": homestayId,
       "homestayName": homestayName,
+      "phone": phone,
       "location": location,
       "checkInDate":
-          dateFormat.format(checkInDate.toUtc()), // Chuyển đổi DateTime sang String
+          dateFormat.format(checkInDate.toUtc()), 
       "checkOutDate": dateFormat.format(checkOutDate.toUtc()),
       "status": status,
       "rating": rating,
@@ -72,12 +76,12 @@ class Booking {
       "userId": userId.toString(), 
     };
   }
-  // Chuyển đổi từ JSON sang Booking
   factory Booking.fromJson(Map<String, dynamic> json) {
     return Booking(
       id: json['id'],
       homestayId: json['homestayId'],
       homestayName: json['homestayName'] ?? '',
+      phone: json['phone'] ?? '',
       location: json['location'],
       checkInDate: DateTime.parse(json['checkInDate']),
       checkOutDate: DateTime.parse(json['checkOutDate']),
@@ -88,4 +92,5 @@ class Booking {
       userId: json['userId'],
     );
   }
+
 }

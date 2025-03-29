@@ -29,7 +29,7 @@ class BookingManager with ChangeNotifier {
 Future<bool> addBooking(Booking booking) async {
   _setLoading(true);
   try {
-    print("Gửi dữ liệu đặt phòng: ${booking.toJson()}"); // In dữ liệu trước khi gửi
+    print("Gửi dữ liệu đặt phòng: ${booking.toJson()}"); 
     final success = await _pocketBaseService.createBooking(booking);
     
     if (success) {
@@ -43,7 +43,7 @@ Future<bool> addBooking(Booking booking) async {
   } catch (error) {
     _error = 'Không thể tạo đặt phòng mới.';
     _setLoading(false);
-    print("Lỗi khi đặt phòng: $error"); // In lỗi chi tiết
+    print("Lỗi khi đặt phòng: $error"); 
     return false;
   }
 }

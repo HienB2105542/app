@@ -31,7 +31,6 @@ class _BookingFormScreenState extends State<BookingFormScreen> {
   }
 
   void _calculateTotalPrice() {
-    // Calculate number of nights
     _nights = _checkOutDate.difference(_checkInDate).inDays;
     setState(() {
       _totalPrice = widget.homestay.price * _nights;
@@ -48,7 +47,6 @@ class _BookingFormScreenState extends State<BookingFormScreen> {
     if (picked != null && picked != _checkInDate) {
       setState(() {
         _checkInDate = picked;
-        // Ensure check-out date is after check-in date
         if (_checkOutDate.isBefore(_checkInDate) ||
             _checkOutDate.isAtSameMomentAs(_checkInDate)) {
           _checkOutDate = _checkInDate.add(const Duration(days: 1));
@@ -83,7 +81,6 @@ void _submitBooking() async {
         _isLoading = true;
       });
 
-      // Lấy userId từ BookService
       final userId = await BookService().getUserId();
       if (userId == null) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -95,32 +92,31 @@ void _submitBooking() async {
         setState(() {
           _isLoading = false;
         });
-        return; // Dừng lại ở đây, tránh truy cập widget khi userId bị null
+        return; 
       }
 
-      // Gán widget.homestay vào một biến trước khi gọi trong hàm async
       final homestay = widget.homestay;
 
       final booking = Booking(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
         homestayId: homestay.id ?? '',
         homestayName: homestay.name,
+        phone: '', 
         location: homestay.location,
         checkInDate: _checkInDate,
         checkOutDate: _checkOutDate,
         status: 'pending',
         nights: _nights,
         totalPrice: _totalPrice,
-        userId: userId, // Gán userId thực
+        userId: userId, 
       );
 
-      // Thêm booking vào manager
       final bookingManager =
           Provider.of<BookingManager>(context, listen: false);
       final success = await bookingManager.addBooking(booking);
       if (success) {
-        await bookingManager.fetchBookings(userId); // Cập nhật danh sách
-        Navigator.pushReplacementNamed(context, '/bookings'); // Chuyển hướng
+        await bookingManager.fetchBookings(userId); 
+        Navigator.pushReplacementNamed(context, '/bookings'); 
       }
 
       setState(() {
@@ -153,7 +149,6 @@ void _submitBooking() async {
                 key: _formKey,
                 child: ListView(
                   children: [
-                    // Homestay info
                     Card(
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
@@ -181,7 +176,6 @@ void _submitBooking() async {
 
                     const SizedBox(height: 20),
 
-                    // User name
                     TextFormField(
                       decoration: const InputDecoration(
                         labelText: 'Họ và tên',
@@ -198,8 +192,23 @@ void _submitBooking() async {
                     ),
 
                     const SizedBox(height: 20),
+                    
+                    TextFormField(
+                      decoration: const InputDecoration(
+                        labelText: 'Số điện thoại',
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Vui lòng nhập số điện thoại';
+                        }
+                        return null;
+                      },
+                      onSaved: (value) {},
+                    ),
 
-                    // Check-in date
+                    const SizedBox(height: 20),
+
                     ListTile(
                       title: const Text('Ngày nhận phòng'),
                       subtitle: Text(
@@ -210,7 +219,6 @@ void _submitBooking() async {
 
                     const Divider(),
 
-                    // Check-out date
                     ListTile(
                       title: const Text('Ngày trả phòng'),
                       subtitle: Text(
@@ -221,7 +229,6 @@ void _submitBooking() async {
 
                     const SizedBox(height: 20),
 
-                    // Price information
                     Card(
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
@@ -270,7 +277,6 @@ void _submitBooking() async {
 
                     const SizedBox(height: 30),
 
-                    // Book button
                     SizedBox(
                       height: 50,
                       child: ElevatedButton(

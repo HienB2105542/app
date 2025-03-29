@@ -14,7 +14,6 @@ class BookingItemCard extends StatelessWidget {
     this.isAdmin = false,
   });
 
-  // Lấy màu dựa trên trạng thái
   Color _getStatusColor(String status) {
     switch (status.toLowerCase()) {
       case 'confirmed':
@@ -98,7 +97,6 @@ class BookingItemCard extends StatelessWidget {
               ),
             ],
           ),
-          // Booking details
           Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -110,7 +108,7 @@ class BookingItemCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         booking
-                            .homestayName, // Sử dụng homestayName thay vì homestayId
+                            .homestayName, 
                         style:
                             Theme.of(context).textTheme.titleMedium?.copyWith(
                                   fontWeight: FontWeight.bold,
@@ -214,7 +212,6 @@ class BookingItemCard extends StatelessWidget {
               ],
             ),
           ),
-          // Action buttons
           Container(
             decoration: BoxDecoration(
               color: Colors.grey.shade50,
@@ -231,8 +228,6 @@ class BookingItemCard extends StatelessWidget {
   }
 
   Widget _buildActionButtons(BuildContext context) {
-    // Các phương thức _buildActionButtons, _buildAdminActions, và _buildUserActions giữ nguyên từ mã gốc
-    // Nếu đã hủy thì không hiển thị các nút hành động
     if (booking.status.toLowerCase() == 'cancelled') {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 16.0),
@@ -245,12 +240,9 @@ class BookingItemCard extends StatelessWidget {
       );
     }
 
-    // Nếu là admin
     if (isAdmin) {
       return _buildAdminActions(context);
     }
-
-    // Nếu là người dùng
     return _buildUserActions(context);
   }
 
@@ -264,7 +256,7 @@ class BookingItemCard extends StatelessWidget {
               icon: const Icon(Icons.check_circle_outline),
               label: const Text('Xác nhận'),
               onPressed: () async {
-                final success = await bookingManager.confirmBooking(booking.id);
+                final success = await bookingManager.confirmBooking(booking.id!);
                 if (success) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -286,7 +278,7 @@ class BookingItemCard extends StatelessWidget {
               icon: const Icon(Icons.cancel_outlined),
               label: const Text('Từ chối'),
               onPressed: () async {
-                final success = await bookingManager.cancelBooking(booking.id);
+                final success = await bookingManager.cancelBooking(booking.id!);
                 if (success) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -313,7 +305,7 @@ class BookingItemCard extends StatelessWidget {
               label: const Text('Hoàn thành'),
               onPressed: () async {
                 final success =
-                    await bookingManager.completeBooking(booking.id);
+                    await bookingManager.completeBooking(booking.id!);
                 if (success) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -414,7 +406,7 @@ class BookingItemCard extends StatelessWidget {
 
                 if (confirm == true) {
                   final success =
-                      await bookingManager.cancelBooking(booking.id);
+                      await bookingManager.cancelBooking(booking.id!);
                   if (success) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
