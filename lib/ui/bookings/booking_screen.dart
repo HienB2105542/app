@@ -27,6 +27,7 @@ class _BookingScreenState extends State<BookingScreen> {
   Future<void> _fetchAllBookings() async {
     await Provider.of<BookingManager>(context, listen: false)
         .fetchAllBookings();
+    setState(() {});
   }
 
   List<Booking> _getFilteredBookings(List<Booking> bookings) {
@@ -53,7 +54,6 @@ class _BookingScreenState extends State<BookingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Danh sách đặt phòng")),
       body: Consumer<BookingManager>(
         builder: (context, bookingManager, child) {
           if (bookingManager.isLoading) {

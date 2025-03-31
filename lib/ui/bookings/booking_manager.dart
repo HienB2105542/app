@@ -3,6 +3,7 @@ import '../../models/booking.dart';
 import '../../services/book_service.dart';
 
 class BookingManager with ChangeNotifier {
+
   final BookService _pocketBaseService = BookService();
   List<Booking> _bookings = [];
   bool _isLoading = false;
@@ -101,9 +102,9 @@ Future<bool> addBooking(Booking booking) async {
       return false;
     }
   }
-
   void _setLoading(bool value) {
     _isLoading = value;
     notifyListeners();
   }
+  
 }

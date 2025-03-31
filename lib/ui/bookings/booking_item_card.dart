@@ -20,33 +20,29 @@ class BookingItemCard extends StatelessWidget {
         return Colors.green;
       case 'pending':
         return Colors.orange;
-      case 'cancelled':
-        return Colors.red;
       case 'completed':
         return Colors.blue;
       default:
-        return Colors.grey;
+        return Colors.red;
     }
   }
 
-  // Lấy Text hiển thị trạng thái
   String _getStatusText(String status) {
     switch (status.toLowerCase()) {
-      case 'Confirmed':
+      case 'confirmed':
         return 'Đã xác nhận';
-      case 'Pending':
+      case 'pending':
         return 'Chờ xác nhận';
-      case 'Cancelled':
-        return 'Đã hủy';
-      case 'Completed':
+      case 'completed':
         return 'Đã hoàn thành';
       default:
-        return 'Không xác định';
+        return 'Đã hủy';
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    print("Status: ${booking.status}");
     final dateFormat = DateFormat('dd/MM/yyyy');
     final checkInDate = dateFormat.format(booking.checkInDate);
     final checkOutDate = dateFormat.format(booking.checkOutDate);
@@ -73,6 +69,10 @@ class BookingItemCard extends StatelessWidget {
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(12),
                   topRight: Radius.circular(12),
+                ),
+                child: Container(
+                  height: 40,
+                  color: Colors.grey.shade200,
                 ),
               ),
               Positioned(
@@ -228,7 +228,7 @@ class BookingItemCard extends StatelessWidget {
   }
 
   Widget _buildActionButtons(BuildContext context) {
-    if (booking.status.toLowerCase() == 'Cancelled') {
+    if (booking.status.toLowerCase() == 'cancelled') {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 16.0),
         child: Center(
@@ -248,7 +248,7 @@ class BookingItemCard extends StatelessWidget {
 
   Widget _buildAdminActions(BuildContext context) {
     final bookingManager = Provider.of<BookingManager>(context, listen: false);
-    if (booking.status.toLowerCase() == 'Pending') {
+    if (booking.status.toLowerCase() == 'pending') {
       return Row(
         children: [
           Expanded(
@@ -345,7 +345,6 @@ class BookingItemCard extends StatelessWidget {
               icon: const Icon(Icons.info_outline),
               label: const Text('Chi tiết'),
               onPressed: () {
-                // Hiển thị chi tiết booking
               },
               style: TextButton.styleFrom(
                 foregroundColor: Colors.blue.shade700,
@@ -361,8 +360,8 @@ class BookingItemCard extends StatelessWidget {
   Widget _buildUserActions(BuildContext context) {
     final bookingManager = Provider.of<BookingManager>(context, listen: false);
 
-    if (booking.status.toLowerCase() == 'Pending' ||
-        booking.status.toLowerCase() == 'Confirmed') {
+    if (booking.status.toLowerCase() == 'pending' ||
+        booking.status.toLowerCase() == 'confirmed') {
       return Row(
         children: [
           Expanded(
@@ -370,7 +369,6 @@ class BookingItemCard extends StatelessWidget {
               icon: const Icon(Icons.message_outlined),
               label: const Text('Nhắn tin'),
               onPressed: () {
-                // Tính năng nhắn tin
               },
               style: TextButton.styleFrom(
                 foregroundColor: Colors.blue.shade700,
@@ -384,7 +382,6 @@ class BookingItemCard extends StatelessWidget {
               icon: const Icon(Icons.cancel_outlined),
               label: const Text('Hủy đặt phòng'),
               onPressed: () async {
-                // Hiển thị dialog xác nhận trước khi hủy
                 final confirm = await showDialog<bool>(
                   context: context,
                   builder: (ctx) => AlertDialog(

@@ -12,24 +12,24 @@ class BookService {
   BookService() : _pb = PocketBase(_baseUrl);
 
   Future<List<Booking>> getAllBookings() async {
-    try {
-      final records = await _pb.collection(_bookingsCollection).getFullList(
-            sort: '-created',
-          );
+    final response = await http.get(
+        Uri.parse("http://10.0.2.2:8090/api/collections/booking/records"));
 
-      return records.map((record) {
-        final data = record.data;
-        data['id'] = record.id;
-        return Booking.fromJson(data);
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      print("Dữ liệu từ API: $data");
+
+      return (data['items'] as List).map((json) {
+        final booking = Booking.fromJson(json);
+        return booking;
       }).toList();
-    } catch (e) {
-      print('Lỗi khi lấy danh sách đặt phòng: $e');
-      return [];
+    } else {
+      throw Exception("Lỗi lấy dữ liệu");
     }
   }
 
 
-  
+
   Future<String?> getUserId() async {
     final prefs = await SharedPreferences.getInstance();
     String? userId = prefs.getString('userId');
