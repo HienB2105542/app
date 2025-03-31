@@ -12,17 +12,18 @@ class BookingManager with ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get error => _error;
 
-  Future<void> fetchBookings(String userId) async {
+  Future<void> fetchAllBookings() async {
     _setLoading(true);
     try {
-      _bookings = await _pocketBaseService.getBookings(userId);
+      _bookings = await _pocketBaseService.getAllBookings();
       _error = null;
     } catch (error) {
       _error = 'Không thể tải danh sách đặt phòng.';
-      print(error);
+      print("Lỗi khi tải danh sách đặt phòng: $error");
     }
     _setLoading(false);
   }
+
 
 Future<bool> addBooking(Booking booking) async {
   _setLoading(true);
@@ -47,15 +48,15 @@ Future<bool> addBooking(Booking booking) async {
 }
 
   Future<bool> confirmBooking(String bookingId) async {
-    return await _updateBookingStatus(bookingId, 'confirmed');
+    return await _updateBookingStatus(bookingId, 'Confirmed');
   }
 
   Future<bool> completeBooking(String bookingId) async {
-    return await _updateBookingStatus(bookingId, 'completed');
+    return await _updateBookingStatus(bookingId, 'Completed');
   }
 
   Future<bool> cancelBooking(String bookingId) async {
-    return await _updateBookingStatus(bookingId, 'cancelled');
+    return await _updateBookingStatus(bookingId, 'Cancelled');
   }
 
   Future<bool> deleteBooking(String bookingId) async {

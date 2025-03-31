@@ -11,23 +11,23 @@ class BookService {
 
   BookService() : _pb = PocketBase(_baseUrl);
 
-  Future<List<Booking>> getBookings(String userId) async {
+  Future<List<Booking>> getAllBookings() async {
     try {
-      final records = await _pb.collection(_bookingsCollection).getList(
-            filter: 'userId = "$userId"',
+      final records = await _pb.collection(_bookingsCollection).getFullList(
             sort: '-created',
           );
 
-      return records.items.map((record) {
+      return records.map((record) {
         final data = record.data;
-        data['id'] = record.id; 
+        data['id'] = record.id;
         return Booking.fromJson(data);
       }).toList();
     } catch (e) {
-      print('Error getting bookings: $e');
+      print('Lỗi khi lấy danh sách đặt phòng: $e');
       return [];
     }
   }
+
 
   
   Future<String?> getUserId() async {

@@ -9,7 +9,6 @@ import '../../models/homestay.dart';
 
 class AppScreens {
   static const String home = '/';
-  static const String intro = '/intro';
   static const String login = '/login';
   static const String bookings = '/bookings';
   static const String profile = '/profile';

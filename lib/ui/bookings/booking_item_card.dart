@@ -32,13 +32,13 @@ class BookingItemCard extends StatelessWidget {
   // Lấy Text hiển thị trạng thái
   String _getStatusText(String status) {
     switch (status.toLowerCase()) {
-      case 'confirmed':
+      case 'Confirmed':
         return 'Đã xác nhận';
-      case 'pending':
+      case 'Pending':
         return 'Chờ xác nhận';
-      case 'cancelled':
+      case 'Cancelled':
         return 'Đã hủy';
-      case 'completed':
+      case 'Completed':
         return 'Đã hoàn thành';
       default:
         return 'Không xác định';
@@ -228,7 +228,7 @@ class BookingItemCard extends StatelessWidget {
   }
 
   Widget _buildActionButtons(BuildContext context) {
-    if (booking.status.toLowerCase() == 'cancelled') {
+    if (booking.status.toLowerCase() == 'Cancelled') {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 16.0),
         child: Center(
@@ -248,7 +248,7 @@ class BookingItemCard extends StatelessWidget {
 
   Widget _buildAdminActions(BuildContext context) {
     final bookingManager = Provider.of<BookingManager>(context, listen: false);
-    if (booking.status.toLowerCase() == 'pending') {
+    if (booking.status.toLowerCase() == 'Pending') {
       return Row(
         children: [
           Expanded(
@@ -361,8 +361,8 @@ class BookingItemCard extends StatelessWidget {
   Widget _buildUserActions(BuildContext context) {
     final bookingManager = Provider.of<BookingManager>(context, listen: false);
 
-    if (booking.status.toLowerCase() == 'pending' ||
-        booking.status.toLowerCase() == 'confirmed') {
+    if (booking.status.toLowerCase() == 'Pending' ||
+        booking.status.toLowerCase() == 'Confirmed') {
       return Row(
         children: [
           Expanded(

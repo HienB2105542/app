@@ -16,6 +16,7 @@ class BookingFormScreen extends StatefulWidget {
 
 class _BookingFormScreenState extends State<BookingFormScreen> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController _phoneController = TextEditingController();
   late DateTime _checkInDate;
   late DateTime _checkOutDate;
   double _totalPrice = 0;
@@ -73,7 +74,7 @@ class _BookingFormScreenState extends State<BookingFormScreen> {
     }
   }
 
-void _submitBooking() async {
+  void _submitBooking() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
@@ -92,31 +93,30 @@ void _submitBooking() async {
         setState(() {
           _isLoading = false;
         });
-        return; 
+        return;
       }
 
       final homestay = widget.homestay;
 
       final booking = Booking(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
         homestayId: homestay.id ?? '',
         homestayName: homestay.name,
-        phone: '', 
+        phone: _phoneController.text,
         location: homestay.location,
         checkInDate: _checkInDate,
         checkOutDate: _checkOutDate,
-        status: 'pending',
+        status: 'Pending',
         nights: _nights,
         totalPrice: _totalPrice,
-        userId: userId, 
+        userId: userId,
       );
 
       final bookingManager =
           Provider.of<BookingManager>(context, listen: false);
       final success = await bookingManager.addBooking(booking);
       if (success) {
-        await bookingManager.fetchBookings(userId); 
-        Navigator.pushReplacementNamed(context, '/bookings'); 
+        await bookingManager.fetchAllBookings();
+        Navigator.pushReplacementNamed(context, '/');
       }
 
       setState(() {
@@ -132,6 +132,12 @@ void _submitBooking() async {
         ),
       );
     }
+  }
+
+  @override
+  void dispose() {
+    _phoneController.dispose();
+    super.dispose();
   }
 
   @override
@@ -168,14 +174,11 @@ void _submitBooking() async {
                                 Text(widget.homestay.location),
                               ],
                             ),
-
                           ],
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 20),
-
                     TextFormField(
                       decoration: const InputDecoration(
                         labelText: 'Họ và tên',
@@ -187,13 +190,12 @@ void _submitBooking() async {
                         }
                         return null;
                       },
-                      onSaved: (value) {
-                      },
+                      onSaved: (value) {},
                     ),
-
                     const SizedBox(height: 20),
-                    
                     TextFormField(
+                      controller: _phoneController,
+                      keyboardType: TextInputType.phone,
                       decoration: const InputDecoration(
                         labelText: 'Số điện thoại',
                         border: OutlineInputBorder(),
@@ -202,13 +204,13 @@ void _submitBooking() async {
                         if (value == null || value.isEmpty) {
                           return 'Vui lòng nhập số điện thoại';
                         }
+                        if (!RegExp(r'^[0-9]{10,11}$').hasMatch(value)) {
+                          return 'Số điện thoại không hợp lệ';
+                        }
                         return null;
                       },
-                      onSaved: (value) {},
                     ),
-
                     const SizedBox(height: 20),
-
                     ListTile(
                       title: const Text('Ngày nhận phòng'),
                       subtitle: Text(
@@ -216,9 +218,7 @@ void _submitBooking() async {
                       trailing: const Icon(Icons.calendar_today),
                       onTap: () => _selectCheckInDate(context),
                     ),
-
                     const Divider(),
-
                     ListTile(
                       title: const Text('Ngày trả phòng'),
                       subtitle: Text(
@@ -226,9 +226,7 @@ void _submitBooking() async {
                       trailing: const Icon(Icons.calendar_today),
                       onTap: () => _selectCheckOutDate(context),
                     ),
-
                     const SizedBox(height: 20),
-
                     Card(
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
@@ -274,9 +272,7 @@ void _submitBooking() async {
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 30),
-
                     SizedBox(
                       height: 50,
                       child: ElevatedButton(

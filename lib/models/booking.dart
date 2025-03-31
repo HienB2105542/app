@@ -14,7 +14,6 @@ class Booking {
   final String userId;
 
   Booking({
-     this.id,
     required this.homestayId,
     required this.homestayName,
     required this.phone,
@@ -26,7 +25,14 @@ class Booking {
     required this.nights,
     required this.totalPrice,
     required this.userId,
-  });
+  }): id = generateBookingId();
+
+  static String generateBookingId() {
+    String timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+    String randomString =
+        DateTime.now().microsecondsSinceEpoch.toString().substring(0, 2);
+    return timestamp + randomString; 
+  }
 
   Booking copyWith(
       {String? id,
@@ -42,7 +48,6 @@ class Booking {
       double? totalPrice,
       String? userId}) {
     return Booking(
-      id: id ?? this.id,
       homestayId: homestayId ?? this.homestayId,
       homestayName: homestayName ?? this.homestayName,
       phone: phone ?? this.phone,
@@ -78,7 +83,6 @@ class Booking {
   }
   factory Booking.fromJson(Map<String, dynamic> json) {
     return Booking(
-      id: json['id'],
       homestayId: json['homestayId'],
       homestayName: json['homestayName'] ?? '',
       phone: json['phone'] ?? '',
